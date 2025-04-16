@@ -42,10 +42,15 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="role" class="form-label">User Role</label>
-                                <select class="form-select" id="role" name="role" required>
-                                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>Regular User</option>
-                                </select>
+                                @if(auth()->user()->isSuperAdmin())
+                                    <select class="form-select" id="role" name="role" required>
+                                        <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                                        <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>Regular User</option>
+                                    </select>
+                                @else
+                                    <input type="text" class="form-control" value="{{ ucfirst($user->role) }}" readonly>
+                                    <input type="hidden" name="role" value="{{ $user->role }}">
+                                @endif
                             </div>
                         </div>
                         <div class="d-flex justify-content-end mt-4">

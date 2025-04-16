@@ -8,23 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
-{
-    public function handle(Request $request, Closure $next)
+{public function handle($request, Closure $next)
     {
-        if (!Auth::check()) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized', 401);
-            }
-            return redirect()->guest(route('login'));
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            abort(403);
         }
-    
-        $user = Auth::user();
-        
-        
-        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
-            abort(403, 'Unauthorized action. You must be an administrator to access this page.');
-        }
-    
         return $next($request);
     }
 }

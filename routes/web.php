@@ -117,6 +117,19 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
    
    // Users management
    Route::resource('users', UserController::class)->except(['show']);
+
+     // مسارات خاصة بالسوبر أدمن فقط
+     Route::middleware('superadmin')->group(function () {
+        Route::put('users/{user}/special', 'Admin\UserController@specialUpdate');
+
+    });
+   
+     
+        
+    Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+  
+
  
      // Contacts management routes
      Route::resource('contacts', ContactController::class)->except(['create', 'store']);
@@ -128,5 +141,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
      Route::post('contacts/{contact}/mark-as-unread', [ContactController::class, 'markAsUnread'])
           ->name('contacts.markAsUnread');
 });
+
+
     
  

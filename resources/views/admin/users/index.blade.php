@@ -10,9 +10,11 @@
                 <div class="card-header pb-0 bg-gradient-dark">
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-white">Users Management</h6>
+                        @if(auth()->user()->isAdmin() || auth()->user()->isSuperAdmin())
                         <a href="{{ route('admin.users.create') }}" class="btn btn-sm btn-light">
                             <i class="fas fa-plus me-2"></i> Add New User
                         </a>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -56,18 +58,21 @@
                                     <td class="align-middle text-center">
                                         <span class="text-secondary text-xs font-weight-bold">{{ $user->created_at->format('M d, Y') }}</span>
                                     </td>
+            
                                     <td class="align-middle">
                                         <div class="d-flex gap-1 justify-content-end">
-                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-info mb-0 px-2 py-1" data-toggle="tooltip" title="Edit">
+                                            @if(auth()->user()->isSuperAdmin())
+                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-info mb-0 px-2 py-1">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
                                             <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="delete-form">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger mb-0 px-2 py-1" data-toggle="tooltip" title="Delete">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger mb-0 px-2 py-1">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
