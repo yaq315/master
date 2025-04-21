@@ -1,4 +1,10 @@
-/* ================ [ أساسيات التصميم ] ================ */
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+@include('layouts.top')
+
+<style>
+
+    /* ================ [ أساسيات التصميم ] ================ */
 :root {
     /* الألوان الرئيسية */
     --primary-color: #2e7d32;  /* الأخضر الأساسي */
@@ -94,32 +100,7 @@ a:hover {
 }
 
 /* ================ [ شريط التنقل ] ================ */
-.navbar {
-    padding: 1rem 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
 
-.navbar-brand {
-    font-weight: 700;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-}
-
-.navbar-brand i {
-    margin-left: 0.5rem;
-}
-
-.nav-link {
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-}
-
-.nav-link i {
-    margin-left: 0.3rem;
-}
 
 /* ================ [ بطاقات التصميم ] ================ */
 .card {
@@ -311,3 +292,28 @@ a:hover {
         margin-bottom: 1rem;
     }
 }
+
+</style>
+<body class="bg-light-green">
+    <!-- شريط التنقل العلوي -->
+
+@include('layouts.header')
+
+
+    <!-- المحتوى الرئيسي -->
+    <main class="py-4">
+        @yield('content')
+    </main>
+
+    <!-- التذييل -->
+  
+@include('layouts.footer')
+
+
+<@include('layouts.bottom')
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @stack('scripts')
+</body>
+
+
+</html>

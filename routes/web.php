@@ -97,17 +97,18 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 // Profile Routes
+// راوتات اليوزر العادي
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'userProfile'])->name('user.profile');
+    Route::get('/profile/edit', [ProfileController::class, 'editUserProfile'])->name('user.profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'updateUserProfile'])->name('user.profile.update');
 });
 
 
   
 
     // Contact Form
-    Route::post('/contact', [ContactController::class, 'store'])
+    Route::post('/contact', action: [ContactController::class, 'store'])
     ->name('contact.store');
 
 // Admin routes group
