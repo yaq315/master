@@ -72,21 +72,20 @@
                                     onchange="window.location.href='{{ route('shop') }}'" 
                                     {{ !request('category') ? 'checked' : '' }}>
                                 <label class="custom-control-label" for="customCheckAll">
-                                    All Products <span class="text-muted">({{ \App\Models\Product::count() }})</span>
+                                    All Plants <span class="text-muted">({{ \App\Models\Product::count() }})</span>
                                 </label>
                             </div>
                             <!-- Dynamic Categories -->
                             @foreach($categories as $category)
                             <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
                                 <input type="checkbox" class="custom-control-input" id="customCheck{{ $category->id }}"
-                                    onchange="window.location.href='{{ route('shop') }}?category={{ $category->slug }}'"
+                                    onchange="window.location.href='{{ route('shop', ['category' => $category->slug]) }}'"
                                     {{ request('category') === $category->slug ? 'checked' : '' }}>
                                 <label class="custom-control-label" for="customCheck{{ $category->id }}">
                                     {{ $category->name }} <span class="text-muted">({{ $category->products->count() }})</span>
                                 </label>
                             </div>
                             @endforeach
-                            
                         </div>
                     </div>
 
@@ -158,11 +157,10 @@
                                     </a>
                                     <h6>
                                         ${{ number_format($product->price, 2) }}
-                                        @if($product->is_on_sale && $product->original_price)
-                                            <span class="original-price">${{ number_format($product->original_price, 2) }}</span>
+                                        @if($product->original_price)
+                                        <span class="original-price">${{ number_format($product->original_price, 2) }}</span>
                                         @endif
                                     </h6>
-                                    
                                 </div>
                             </div>
                         </div>

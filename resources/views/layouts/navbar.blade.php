@@ -31,7 +31,8 @@
                         <li><a href="{{route('shop')}}">Shop</a>
                             <ul class="dropdown">
                                 <li><a href="{{route('shop')}}">Shop</a></li>
-                                <li><a href="{{route('shop-details')}}">Shop Details</a></li>
+                                {{-- <a href="{{ route('shop-details', ['product' => $product->slug]) }}">Shop Details</a> --}}
+
                                 <li><a href="{{route('cart')}}">Cart</a></li>
                                 <li><a href="{{route('checkout')}}">Checkout</a></li>
                             </ul>

@@ -9,7 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 
-
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\ContactController;
 
 /*
@@ -47,9 +47,9 @@ Route::get('/shop', function () {
     return view('shop');
 })->name('shop');
 
-Route::get('/shop-details', function () {
-    return view('shop-details');
-})->name('shop-details');
+// Route::get('/shop-details', function () {
+//     return view('shop-details');
+// })->name('shop-details');
 
 Route::get('/cart', function () {
     return view('cart');
@@ -144,5 +144,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 });
 
 
+// في routes/web.php
+
+
+Route::get('/shop', [ProductController::class, 'index'])->name('shop');
+Route::get('/shop/{product:slug}', [ProductController::class, 'show'])->name('shop-details');
     
  

@@ -15,6 +15,9 @@
 
     <!-- Core Stylesheet -->
     <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
     
 
 </head>
