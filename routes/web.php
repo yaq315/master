@@ -11,7 +11,10 @@ use App\Http\Controllers\Admin\UserController;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\ContactController;
-
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\PdfController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -96,6 +99,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 
+
 // Profile Routes
 // راوتات اليوزر العادي
 Route::middleware('auth')->group(function () {
@@ -117,8 +121,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
    
    // Users management
+
+  
+
    Route::resource('users', UserController::class)->except(['show']);
 
+   
      // مسارات خاصة بالسوبر أدمن فقط
      Route::middleware('superadmin')->group(function () {
         Route::put('users/{user}/special', 'Admin\UserController@specialUpdate');
@@ -150,4 +158,51 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 Route::get('/shop', [ProductController::class, 'index'])->name('shop');
 Route::get('/shop/{product:slug}', [ProductController::class, 'show'])->name('shop-details');
     
- 
+
+
+
+use App\Http\Controllers\ProductReviewController;
+
+// Route::middleware(['auth','verified'])->group(function () {
+//     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+  
+   
+// });
+
+
+Route::post('/products/{product_id}/reviews', [ProductReviewController::class, 'store'])->name('reviews.store');
+
+
+// في routes/web.php
+Route::get('/test-session', function() {
+    session(['test' => 'value']);
+    return session('test');
+});
+
+
+
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items');
+Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
+Route::post('/cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
+Route::delete('/cart/delete/{id}', [CartController::class, 'deleteItem'])->name('cart.delete');
+Route::post('/cart/update', [CartController::class, 'updateQuantity'])->name('cart.update');
+
+
+
+Route::middleware(['auth'])->group(function () {
+    // الطلبات
+    Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+    Route::post('/place-order', [OrderController::class, 'placeOrder'])->name('place.order');
+    Route::get('/order-success/{order}', [OrderController::class, 'orderSuccess'])->name('order.success');
+    
+    // الكوبونات
+    Route::post('/apply-coupon', [CouponController::class, 'apply'])->name('apply.coupon');
+});
+
+
+Route::post('/cart/update-totals', [CartController::class, 'updateTotals'])->name('cart.updateTotals');
+
+Route::get('/orders/{order}/pdf', [PdfController::class, 'generateOrderPdf'])
+    ->name('orders.pdf')
+    ->middleware('auth');

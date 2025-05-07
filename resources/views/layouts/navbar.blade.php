@@ -1,7 +1,7 @@
 <nav class="classy-navbar justify-content-between" id="alazeaNav">
 
     <!-- Nav Brand -->
-    <a href="index.html" class="nav-brand"><img src="img/core-img/logo2.png" alt=""style="height:150px"></a>
+    <a href="#" class="nav-brand"><img src="img/core-img/logo2.png" alt=""style="height:150px"></a>
 
     <!-- Navbar Toggler -->
     <div class="classy-navbar-toggler">
@@ -33,7 +33,7 @@
                                 <li><a href="{{route('shop')}}">Shop</a></li>
                                 {{-- <a href="{{ route('shop-details', ['product' => $product->slug]) }}">Shop Details</a> --}}
 
-                                <li><a href="{{route('cart')}}">Cart</a></li>
+                                <li><a href="{{route('cart.view')}}">Cart</a></li>
                                 <li><a href="{{route('checkout')}}">Checkout</a></li>
                             </ul>
                         </li>

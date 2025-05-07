@@ -10,17 +10,14 @@
         </div>
     </div>
 
-    <!-- ##### Header Area Start ##### -->
-@include('layouts.header')
-    <!-- ##### Header Area End ##### -->
+    <!-- Header -->
+    @include('layouts.header')
 
-    <!-- ##### Breadcrumb Area Start ##### -->
+    <!-- Breadcrumb -->
     <div class="breadcrumb-area">
-        <!-- Top Breadcrumb Area -->
-        <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center" style="background-image: url({{asset('img/bg-img/64.avif')}});">
+        <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center" style="background-image: url({{asset('img/bg-img/51.jpg')}});">
             <h2>Checkout</h2>
         </div>
-
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -34,127 +31,247 @@
             </div>
         </div>
     </div>
-    <!-- ##### Breadcrumb Area End ##### -->
 
-    <!-- ##### Checkout Area Start ##### -->
-    <div class="checkout_area mb-100">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-12 col-lg-7">
-                    <div class="checkout_details_area clearfix">
-                        <h5>Billing Details</h5>
-                        <form action="#" method="post">
-                            <div class="row">
-                                <div class="col-md-6 mb-4">
-                                    <label for="first_name">First Name *</label>
-                                    <input type="text" class="form-control" id="first_name" value="" required>
+    <div class="container my-5">
+        <div class="row">
+            <!-- Shipping & Payment -->
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Shipping Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="checkout-form" method="POST" action="{{ route('place.order') }}">
+                            @csrf
+                            
+                            <!-- Personal Information -->
+                            <div class="form-row mb-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name">Full Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" 
+                                           value="{{ Auth::user()->name }}" required>
                                 </div>
-                                <div class="col-md-6 mb-4">
-                                    <label for="last_name">Last Name *</label>
-                                    <input type="text" class="form-control" id="last_name" value="" required>
-                                </div>
-                                <div class="col-12 mb-4">
-                                    <label for="email_address">Email Address *</label>
-                                    <input type="email" class="form-control" id="email_address" value="">
-                                </div>
-                                <div class="col-12 mb-4">
-                                    <label for="phone_number">Phone Number *</label>
-                                    <input type="number" class="form-control" id="phone_number" min="0" value="">
-                                </div>
-                                <div class="col-12 mb-4">
-                                    <label for="company">Company Name</label>
-                                    <input type="text" class="form-control" id="company" value="">
-                                </div>
-                                <div class="col-12 mb-4">
-                                    <label for="company">Address *</label>
-                                    <input type="text" class="form-control" id="address" value="">
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <label for="city">Town/City *</label>
-                                    <input type="text" class="form-control" id="city" value="">
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <label for="state">State/Province *</label>
-                                    <input type="text" class="form-control" id="state" value="">
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <label for="country">Country</label>
-                                    <select class="custom-select d-block w-100" id="country">
-                                        <option value="usa">United States</option>
-                                        <option value="uk">United Kingdom</option>
-                                        <option value="ger">Germany</option>
-                                        <option value="fra">France</option>
-                                        <option value="ind">India</option>
-                                        <option value="aus">Australia</option>
-                                        <option value="bra">Brazil</option>
-                                        <option value="cana">Canada</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <label for="postcode">Postcode/Zip</label>
-                                    <input type="text" class="form-control" id="postcode" value="">
-                                </div>
-                                <div class="col-md-12 mb-4">
-                                    <label for="order-notes">Order Notes</label>
-                                    <textarea class="form-control" id="order-notes" cols="30" rows="10" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
-                                </div>
-                                <div class="col-12">
-                                    <div class="d-flex align-items-center">
-                                        <!-- Single Checkbox -->
-                                        <div class="custom-control custom-checkbox d-flex align-items-center mr-30">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                            <label class="custom-control-label" for="customCheck1">Ship to a different address?</label>
-                                        </div>
-                                        <!-- Single Checkbox -->
-                                        <div class="custom-control custom-checkbox d-flex align-items-center">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck2">
-                                            <label class="custom-control-label" for="customCheck2">Create an account?</label>
-                                        </div>
-                                    </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="text" class="form-control" id="phone" name="phone" required>
                                 </div>
                             </div>
+                            
+                            <!-- Shipping Address -->
+                            <div class="form-group mb-3">
+                                <label for="city">Governorate</label>
+                                <select class="form-control" id="city" name="city" required>
+                                    <option value="">Select Governorate</option>
+                                    @foreach(['Amman', 'Zarqa', 'Irbid', 'Balqa', 'Karak', 'Ma\'an', 'Aqaba', 'Mafraq', 'Tafilah', 'Madaba', 'Jerash', 'Ajloun'] as $gov)
+                                        <option value="{{ $gov }}">{{ $gov }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="address">Full Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="2" required></textarea>
+                            </div>
+                            
+                            <!-- Payment Method -->
+                            <div class="payment-methods mb-4">
+                                <h6 class="mb-3">Payment Method</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" 
+                                           id="cash-on-delivery" value="cash_on_delivery" checked>
+                                    <label class="form-check-label" for="cash-on-delivery">
+                                        Cash on Delivery
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Order Notes -->
+                            <div class="form-group mb-3">
+                                <label for="notes">Additional Notes (optional)</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="2"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success btn-block py-2">
+                                Confirm Order
+                            </button>
                         </form>
                     </div>
                 </div>
-
-                <div class="col-12 col-lg-4">
-                    <div class="checkout-content">
-                        <h5 class="title--">Your Order</h5>
-                        <div class="products">
-                            <div class="products-data">
-                                <h5>Products:</h5>
-                                <div class="single-products d-flex justify-content-between align-items-center">
-                                    <p>Recuerdos Plant</p>
-                                    <h5>$9.99</h5>
-                                </div>
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="order-items mb-3">
+                            @foreach($cartItems as $item)
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>{{ $item->product->name }} × {{ $item->quantity }}</span>
+                                <span>{{ number_format($item->product->price * $item->quantity, 2) }} JOD</span>
                             </div>
+                            @endforeach
                         </div>
-                        <div class="subtotal d-flex justify-content-between align-items-center">
-                            <h5>Subtotal</h5>
-                            <h5>$9.99</h5>
-                        </div>
-                        <div class="shipping d-flex justify-content-between align-items-center">
-                            <h5>Shipping</h5>
-                            <h5>$3.00</h5>
-                        </div>
-                        <div class="order-total d-flex justify-content-between align-items-center">
-                            <h5>Order Total</h5>
-                            <h5>$12.99</h5>
-                        </div>
-                        <div class="checkout-btn mt-30">
-                            <a href="#" class="btn alazea-btn w-100">Place Order</a>
+                        
+                        <hr>
+                        
+                        <div class="order-totals">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal</span>
+                                <span>{{ number_format($subtotal, 2) }} JOD</span>
+                            </div>
+                            
+                            @if($discount > 0)
+                            <div class="d-flex justify-content-between mb-2 text-success">
+                                <span>Discount</span>
+                                <span>-{{ number_format($discount, 2) }} JOD</span>
+                            </div>
+                            @endif
+                            
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Shipping</span>
+                                <span>{{ number_format($shipping, 2) }} JOD</span>
+                            </div>
+                            
+                            <hr>
+                            
+                            <div class="d-flex justify-content-between font-weight-bold">
+                                <span>Total</span>
+                                <span>{{ number_format($total, 2) }} JOD</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- ##### Checkout Area End ##### -->
 
-    <!-- ##### Footer Area Start ##### -->
- @include('layouts.footer')
-    <!-- ##### Footer Area End ##### -->
-@include('layouts.bottom')
+    <!-- Footer -->
+    @include('layouts.footer')
+    @include('layouts.bottom')
+
+    <!-- JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Apply Coupon
+        document.getElementById('apply-coupon-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch("{{ route('apply.coupon') }}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Reload to update totals
+                } else {
+                    document.getElementById('coupon-message').innerHTML = `
+                        <div class="alert alert-danger">${data.message}</div>
+                    `;
+                }
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const checkoutForm = document.getElementById('checkout-form');
+    
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // جمع بيانات الفورم
+            const formData = new FormData(checkoutForm);
+            
+            // عرض SweetAlert للتأكيد
+            Swal.fire({
+                title: 'Confirm Your Order',
+                html: `
+                    <div class="text-left">
+                        <p><strong>Name:</strong> ${formData.get('name')}</p>
+                        <p><strong>Phone:</strong> ${formData.get('phone')}</p>
+                        <p><strong>Governorate:</strong> ${formData.get('city')}</p>
+                        <p><strong>Address:</strong> ${formData.get('address')}</p>
+                        <p><strong>Payment Method:</strong> Cash on Delivery</p>
+                        <hr>
+                        <p><strong>Total Amount:</strong> {{ number_format($total, 2) }} JOD</p>
+                    </div>
+                `,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm Order',
+                cancelButtonText: 'Review Order',
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // إرسال الفورم عبر AJAX
+                    fetch(checkoutForm.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // عرض رسالة نجاح وتوجيه إلى صفحة النجاح
+                      // في جزء رسالة النجاح بعد تأكيد الطلب
+Swal.fire({
+    title: 'Order Placed Successfully!',
+    html: `
+        <div class="text-left">
+            <p>Order Number: <strong>${data.order_number}</strong></p>
+            <p>We have sent a confirmation to your email.</p>
+            <p>Thank you for shopping with LeafyLand!</p>
+        </div>
+    `,
+    icon: 'success',
+    confirmButtonText: 'Download Invoice',
+    confirmButtonColor: '#28a745',
+    showCancelButton: true,
+    cancelButtonText: 'Continue Shopping'
+}).then((result) => {
+    if (result.isConfirmed) {
+        // تحميل ملف PDF مباشرة
+        window.location.href = `/orders/${data.order_id}/pdf`;
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+        window.location.href = '/';
+    }
+});
+                        } else {
+                            // عرض رسالة خطأ
+                            Swal.fire({
+                                title: 'Error!',
+                                text: data.message || 'Failed to place order. Please try again.',
+                                icon: 'error'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while processing your order.',
+                            icon: 'error'
+                        });
+                    });
+                }
+            });
+        });
+    }
+});
+    </script>
 </body>
-
 </html>

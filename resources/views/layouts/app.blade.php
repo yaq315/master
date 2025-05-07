@@ -316,4 +316,23 @@ a:hover {
 </body>
 
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // تحديث عداد السلة عند تحميل الصفحة
+        fetch('/cart/count')
+            .then(response => response.json())
+            .then(data => {
+                updateCartCount(data.count);
+            });
+    });
+    
+    function updateCartCount(count) {
+        const cartQuantityElements = document.querySelectorAll('.cart-quantity');
+        cartQuantityElements.forEach(el => {
+            el.textContent = `(${count})`;
+        });
+    }
+    </script>
+
+
 </html>

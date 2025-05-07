@@ -14,7 +14,7 @@
                             </a>
                             <a href="#" data-toggle="tooltip" data-placement="bottom" title="+1 234 567 890">
                                 <i class="fa fa-phone" aria-hidden="true"></i> 
-                                <span>Call Us: +1 234 567 890</span>
+                                <span>Call Us: +962 7 0000 0000</span>
                             </a>
                         </div>
                 
@@ -34,18 +34,33 @@
                             </div> --}}
                             <!-- Login -->
                             <div class="login">
-                                <a href="{{route('login')}}">
-                                    <i class="fa fa-user" aria-hidden="true"></i> 
-                                    <span>Login</span>
-                                </a>
+                                @if(Auth::check())
+                                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                        @csrf
+                                        <button type="submit" class="login-link">
+                                            <i class="fa fa-user" aria-hidden="true"></i> 
+                                            <span>Logout</span>
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}" class="login-link">
+                                        <i class="fa fa-user" aria-hidden="true"></i> 
+                                        <span>Login</span>
+                                    </a>
+                                @endif
                             </div>
+                            
+                            
+                            
                             <!-- Cart -->
-                            <div class="cart">
-                                <a href="#">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> 
-                                    <span>Cart <span class="cart-quantity"></span></span>
-                                </a>
-                            </div>
+                         <!-- Cart -->
+<div class="cart">
+    <a href="{{ route('cart.view') }}">
+        <i class="fa fa-shopping-cart" aria-hidden="true"></i> 
+        <span>Cart <span class="cart-quantity"> @include('components.cart-count')</span></span>
+    </a>
+</div>
+
                         </div>
                     </div>
                 </div>
@@ -73,3 +88,36 @@
         </div>
     </div>
 </header>
+
+<script>
+    // JavaScript لتحديث عدد المنتجات في السلة عند إضافة منتج
+    document.querySelector('.add-to-cart-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        let formData = new FormData(this);
+        
+        fetch("{{ route('cart.add') }}", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateCartQuantity(); // تحديث عدد المنتجات في السلة
+            }
+        });
+    });
+    
+    function updateCartQuantity() {
+        fetch("{{ route('cart.items') }}")
+        .then(response => response.json())
+        .then(data => {
+            let totalQuantity = 0;
+            data.forEach(item => {
+                totalQuantity += item.quantity; // إجمالي الكمية في السلة
+            });
+            document.querySelector('.cart-quantity').textContent = totalQuantity;
+        });
+    }
+    </script>
+    

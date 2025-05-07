@@ -41,88 +41,105 @@
     <!-- ##### Cart Area Start ##### -->
     <div class="cart-area section-padding-0-100 clearfix">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="cart-table clearfix">
-                        <table class="table table-responsive">
-                            <thead>
-                                <tr>
-                                    <th>Products</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>TOTAL</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="cart_product_img">
-                                        <a href="#"><img src="img/bg-img/34.jpg" alt="Product"></a>
-                                        <h5>Recuerdos Plant</h5>
-                                    </td>
-                                    <td class="qty">
-                                        <div class="quantity">
-                                            <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                            <input type="number" class="qty-text" id="qty" step="1" min="1" max="99" name="quantity" value="1">
-                                            <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                                        </div>
-                                    </td>
-                                    <td class="price"><span>$9.99</span></td>
-                                    <td class="total_price"><span>$9.99</span></td>
-                                    <td class="action"><a href="#"><i class="icon_close"></i></a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            @section('content')
+            <div class="cart-area container my-5">
+                <h2 class="mb-4">🛒 Your Cart</h2>
+                <table class="table table-bordered table-hover text-center">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Image</th>
+                            <th>Product</th>
+                            <th>Size</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($cartItems as $item)
+                            <tr data-id="{{ $item->id }}">
+                                <td>
+                                    <img src="{{ asset('storage/' . $item->product->image) }}" alt="Product Image" width="60">
+                                </td>
+                                <td>
+                                    <a href="{{ route('shop-details', $item->product->slug) }}">
+                                        {{ $item->product->name }}
+                                    </a>
+                                </td>
+                                <td>{{ $item->size }}</td>
+                                <td>
+                                    <input type="number" min="1" value="{{ $item->quantity }}" 
+                                           class="form-control quantity-input" 
+                                           data-cart-id="{{ $item->id }}" 
+                                           data-max="{{ $item->product->stock }}">
+                                </td>
+                                
+                                <td>${{ number_format($item->product->price, 2) }}</td>
+                                <td class="item-total">${{ number_format($item->product->price * $item->quantity, 2) }}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $item->id }}">🗑️</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+        
 
             <div class="row">
-
                 <!-- Coupon Discount -->
                 <div class="col-12 col-lg-6">
-                    <div class="coupon-discount mt-70">
-                        <h5>COUPON DISCOUNT</h5>
-                        <p>Coupons can be applied in the cart prior to checkout. Add an eligible item from the booth of the seller that created the coupon code to your cart. Click the green "Apply code" button to add the coupon to your order. The order total will update to indicate the savings specific to the coupon code entered.</p>
-                        <form action="#" method="post">
-                            <input type="text" name="coupon-code" placeholder="Enter your coupon code">
-                            <button type="submit">APPLY COUPON</button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Cart Totals -->
-                <div class="col-12 col-lg-6">
-                    <div class="cart-totals-area mt-70">
-                        <h5 class="title--">Cart Total</h5>
-                        <div class="subtotal d-flex justify-content-between">
-                            <h5>Subtotal</h5>
-                            <h5>$9.99</h5>
-                        </div>
-                        <div class="shipping d-flex justify-content-between">
-                            <h5>Shipping</h5>
-                            <div class="shipping-address">
-                                <form action="#" method="post">
-                                    <select class="custom-select">
-                                      <option selected>Country</option>
-                                      <option value="1">USA</option>
-                                      <option value="2">Latvia</option>
-                                      <option value="3">Japan</option>
-                                      <option value="4">Bangladesh</option>
-                                    </select>
-                                    <input type="text" name="shipping-text" id="shipping-text" placeholder="State">
-                                    <input type="text" name="shipping-zip" id="shipping-zip" placeholder="ZIP">
-                                    <button type="submit">Update Total</button>
-                                </form>
+                    <div class="coupon-discount mt-4">
+                        <h5 class="mb-3">Apply Coupon</h5>
+                        Coupons can be applied in the cart prior to checkout. Add an eligible item from the booth of the seller that created the coupon code to your cart. Click the green "Apply code" button to add the coupon to your order. The order total will update to indicate the savings specific to the coupon code entered.
+                        <div class="input-group">
+                            <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Enter coupon code">
+                            <div class="input-group-append">
+                                <button class="btn btn-success" type="button" id="apply-coupon-btn">Apply</button>
                             </div>
                         </div>
-                        <div class="total d-flex justify-content-between">
-                            <h5>Total</h5>
-                            <h5>$9.99</h5>
+                        <div id="coupon-message" class="mt-2 small"></div>
+                    </div>
+                </div>
+            
+                <!-- Cart Totals -->
+                <div class="col-12 col-lg-6">
+                    <div class="cart-totals-area mt-4">
+                        <h5 class="mb-3">Order Summary</h5>
+                        
+                        <div class="cart-summary">
+                            <!-- Subtotal -->
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal</span>
+                                <span id="subtotal">${{ number_format($subtotal, 2) }}</span>
+                            </div>
+                            
+                            <!-- Coupon Discount -->
+                            <div class="d-flex justify-content-between mb-2 text-success" id="coupon-row" style="display: none !important;">
+                                <span>Discount (<span id="coupon-code-display"></span>)</span>
+                                <span id="coupon-value">-$0.00</span>
+                            </div>
+                            
+                            <!-- Shipping -->
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Shipping</span>
+                                <span id="shipping-cost">${{ number_format($shipping, 2) }}</span>
+                            </div>
+                            
+                            <hr>
+                            
+                            <!-- Total -->
+                            <div class="d-flex justify-content-between font-weight-bold">
+                                <span>Total</span>
+                                <span id="total">${{ number_format($total, 2) }}</span>
+                            </div>
                         </div>
-                        <div class="checkout-btn">
-                            <a href="#" class="btn alazea-btn w-100">PROCEED TO CHECKOUT</a>
-                        </div>
+                        
+                        <!-- Proceed to Checkout -->
+                        <a href="{{ route('checkout') }}" class="btn btn-success btn-block mt-4 py-2">
+                            Proceed to Checkout
+                        </a>
                     </div>
                 </div>
             </div>
@@ -135,7 +152,225 @@
   @include('layouts.footer')
     <!-- ##### Footer Area End ##### -->
 @include('layouts.bottom')
+
+
+
   
 </body>
+<!-- SweetAlert CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+<script>
+
+    
+document.querySelectorAll('.quantity-input').forEach(input => {
+    input.addEventListener('change', function() {
+        const cartId = this.dataset.cartId;
+        const newQuantity = this.value;
+        const maxQuantity = this.dataset.max;
+        const row = this.closest('tr');
+        const price = parseFloat(row.querySelector('td:nth-child(5)').textContent.replace('$', ''));
+
+        if (parseInt(newQuantity) > parseInt(maxQuantity)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Quantity Exceeded',
+                text: `Only ${maxQuantity} items available in stock.`
+            });
+            this.value = maxQuantity;
+            return;
+        }
+
+        fetch("{{ route('cart.update') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                cart_id: cartId,
+                quantity: newQuantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // تحديث السعر الإجمالي للعنصر
+                row.querySelector('.item-total').textContent = '$' + (price * newQuantity).toFixed(2);
+                
+                // تحديث الإجماليات
+                document.getElementById('subtotal').textContent = '$' + data.totals.subtotal.toFixed(2);
+                document.getElementById('shipping-cost').textContent = '$' + data.totals.shipping.toFixed(2);
+                document.getElementById('total').textContent = '$' + data.totals.total.toFixed(2);
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Updated',
+                    text: 'Quantity updated successfully!',
+                    timer: 1200,
+                    showConfirmButton: false
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while updating quantity.'
+            });
+        });
+    });
+});
+
+    document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const id = this.dataset.id;
+        
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/cart/delete/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your item has been deleted.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Apply Coupon in Cart Page
+    const applyCouponBtn = document.getElementById('apply-coupon-btn');
+    if (applyCouponBtn) {
+        applyCouponBtn.addEventListener('click', applyCoupon);
+    }
+
+    // Apply Coupon in Checkout Page
+    const applyCouponForm = document.getElementById('apply-coupon-form');
+    if (applyCouponForm) {
+        applyCouponForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            applyCoupon();
+        });
+    }
+
+    function applyCoupon() {
+        const couponCode = document.getElementById('coupon_code')?.value || 
+                          document.querySelector('#apply-coupon-form input[name="coupon_code"]')?.value;
+        
+        if (!couponCode) {
+            showCouponMessage('Please enter a coupon code', 'error');
+            return;
+        }
+
+        const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace(/[^0-9.-]+/g,""));
+        const couponMessage = document.getElementById('coupon-message');
+
+        fetch("{{ route('apply.coupon') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                coupon_code: couponCode,
+                subtotal: subtotal
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateOrderTotals(data.coupon.discount, data.coupon.code);
+                showCouponMessage(data.message, 'success');
+                
+                // If on cart page, redirect to checkout
+                if (window.location.pathname.includes('cart')) {
+                    window.location.href = "{{ route('checkout') }}";
+                }
+            } else {
+                showCouponMessage(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showCouponMessage('An error occurred. Please try again.', 'error');
+            console.error('Error:', error);
+        });
+    }
+
+    function updateOrderTotals(discount, couponCode) {
+        const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace(/[^0-9.-]+/g,""));
+        const shipping = parseFloat(document.getElementById('shipping-cost').textContent.replace(/[^0-9.-]+/g,""));
+        
+        // Update coupon row
+        const couponRow = document.getElementById('coupon-row');
+        if (couponRow) {
+            couponRow.style.display = 'flex';
+            document.getElementById('coupon-code-display').textContent = couponCode;
+            document.getElementById('coupon-value').textContent = `-${discount.toFixed(2)}`;
+        }
+        
+        // Update total
+        const total = subtotal + shipping - discount;
+        document.getElementById('total').textContent = total.toFixed(2);
+    }
+
+    function showCouponMessage(message, type) {
+        const couponMessage = document.getElementById('coupon-message');
+        if (!couponMessage) return;
+        
+        couponMessage.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        `;
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    // Update shipping cost when country changes
+    document.getElementById('country').addEventListener('change', function() {
+        updateTotals();
+    });
+
+    // Function to update all totals
+    function updateTotals() {
+        fetch("{{ route('cart.items') }}")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('subtotal').textContent = '$' + data.totals.subtotal.toFixed(2);
+                document.getElementById('shipping-cost').textContent = '$' + data.totals.shipping.toFixed(2);
+                document.getElementById('total').textContent = '$' + data.totals.total.toFixed(2);
+                document.getElementById('cart-count').textContent = data.totals.cart_count;
+            });
+    }
+
+    // Initialize totals
+    updateTotals();
+});
+
+    </script>
 </html>

@@ -18,6 +18,8 @@ return [
         'passwords' => 'users',
     ],
 
+
+    'redirect_to' => '/login',
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards

@@ -1,11 +1,10 @@
-@extends('layouts.contain_about')
+@extends('layouts.contain')
 
 @section('content')
 <!-- Breadcrumb Area Start -->
 <div class="breadcrumb-area">
-    <!-- Top Breadcrumb Area -->
-    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center" style="background-image: url({{asset('img/bg-img/63.jpg')}}); background-color: rgba(0,0,0,0.4); background-blend-mode: overlay;">
-        <h2>Product Details</h2>
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center" style="background-image: url({{asset('img/bg-img/63.jpg')}});">
+        <h2 class="text-white">Product Details</h2>
     </div>
 
     <div class="container">
@@ -25,182 +24,227 @@
 <!-- Breadcrumb Area End -->
 
 <!-- Product Details Area Start -->
-<section class="single_product_details_area section-padding-100">
+<section class="product-details-section py-5">
     <div class="container">
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <div class="single_product_thumb">
-                    <div id="product_details_slider" class="carousel slide" data-ride="carousel">
-                        <!-- Slides -->
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img class="d-block w-100" src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
-                            </div>
-                            @if($product->images)
-                                @foreach(json_decode($product->images) as $image)
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="{{ asset('storage/' . $image) }}" alt="{{ $product->name }}">
-                                </div>
-                                @endforeach
-                            @endif
-                        </div>
-                        <!-- Controls -->
-                        <a class="carousel-control-prev" href="#product_details_slider" role="button" data-slide="prev">
-                            <i class="fa fa-angle-left" aria-hidden="true"></i>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#product_details_slider" role="button" data-slide="next">
-                            <i class="fa fa-angle-right" aria-hidden="true"></i>
-                            <span class="sr-only">Next</span>
-                        </a>
+        <div class="row g-5">
+            <!-- Product Images -->
+            <div class="col-lg-6">
+                <div class="product-gallery">
+                    <div class="main-image mb-4">
+                        <img id="mainProductImage" src="{{ asset('storage/' . $product->image) }}" 
+                             alt="{{ $product->name }}" class="img-fluid w-100 rounded-3">
                     </div>
+                    
+                    @if($product->images && is_array(json_decode($product->images)))
+                    <div class="thumbnail-gallery d-flex flex-wrap gap-3">
+                        <div class="thumbnail-item active">
+                            <img src="{{ asset('storage/' . $product->image) }}" 
+                                 alt="{{ $product->name }}" class="img-fluid rounded-2" style="width: 80px; height: 80px; object-fit: cover;">
+                        </div>
+                        @foreach(json_decode($product->images) as $image)
+                        <div class="thumbnail-item">
+                            <img src="{{ asset('storage/' . $image) }}" 
+                                 alt="{{ $product->name }}" class="img-fluid rounded-2" style="width: 80px; height: 80px; object-fit: cover;">
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
                 </div>
             </div>
 
-            <div class="col-12 col-md-6">
-                <div class="single_product_desc">
-                    <h4>{{ $product->name }}</h4>
-                    <h5>
-                        ${{ number_format($product->price, 2) }}
+            <!-- Product Info -->
+            <div class="col-lg-6">
+                <div class="product-info p-4">
+                    <h1 class="product-title mb-3 fw-bold">{{ $product->name }}</h1>
+                    
+                    <div class="price-section mb-4">
+                        <span class="current-price fs-3 text-dark fw-bold">${{ number_format($product->price, 2) }}</span>
+                        <span class="product-size text-muted ms-2">Size: Medium</span>
                         @if($product->original_price)
-                        <span>${{ number_format($product->original_price, 2) }}</span>
+                        <span class="original-price text-muted text-decoration-line-through ms-2">${{ number_format($product->original_price, 2) }}</span>
+                        <span class="discount-badge bg-success text-white px-2 py-1 rounded ms-2 fs-6">
+                            Save {{ number_format(100 - ($product->price / $product->original_price * 100), 0) }}%
+                        </span>
                         @endif
-                    </h5>
-                    <p>{{ $product->description }}</p>
-
-                    <!-- Care Information -->
-                    <div class="care-info mb-30">
-                        <h6>Care Instructions</h6>
-                        <ul>
-                            <li><i class="fa fa-sun-o"></i> Light: Bright indirect light</li>
-                            <li><i class="fa fa-tint"></i> Water: Once a week</li>
-                            <li><i class="fa fa-thermometer-half"></i> Temperature: 18-24°C</li>
-                        </ul>
                     </div>
 
+                    <div class="product-description mb-4">
+                        <p class="text-secondary">{{ $product->description }}</p>
+                    </div>
+
+                    <!-- Care Information -->
+                    @if($product->care_instructions)
+                    <div class="care-info mb-4">
+                        <h5 class="mb-3 fw-semibold">Care Instructions</h5>
+                        <div class="care-content bg-light p-3 rounded-3">
+                            {!! nl2br(e($product->care_instructions)) !!}
+                        </div>
+                    </div>
+                    @endif
+
                     <!-- Add to Cart Form -->
-                    <form class="cart-form clearfix" method="post">
-                        <!-- Select Box -->
-                        <div class="select-box d-flex mt-50 mb-30">
-                            <select name="size" id="productSize" class="mr-5">
-                                <option value="small">Small</option>
-                                <option value="medium">Medium</option>
-                                <option value="large">Large</option>
-                            </select>
-                            <select name="quantity" id="productQuantity">
-                                @for($i = 1; $i <= 10; $i++)
-                                <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
-                        </div>
-                        <!-- Cart & Favourite Box -->
-                        <div class="cart-fav-box d-flex align-items-center">
-                            <!-- Cart -->
-                            <button type="submit" name="addtocart" class="btn alazea-btn mr-3">Add to cart</button>
-                            <!-- Favourite -->
-                            <div class="product-favourite ml-4">
-                                <a href="#" class="favme fa fa-heart"></a>
-                            </div>
-                        </div>
-                    </form>
+                   @auth
+    <!-- Form يظهر فقط إذا كان المستخدم مسجلاً دخوله -->
+    <form class="add-to-cart-form mb-4" method="post" action="{{ route('cart.add') }}">
+        @csrf
+        <input type="hidden" name="product_id" value="{{ $product->id }}">
+        
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <label for="size" class="form-label fw-medium">Size</label>
+                <input type="text" name="size" id="size" class="form-control py-2" value="Medium" readonly>
+            </div>
+            <div class="col-md-6">
+                <label for="quantity" class="form-label fw-medium">Quantity</label>
+                <input type="number" name="quantity" id="quantity" 
+                       class="form-control py-2 text-center" value="1" min="1" max="10">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-dark w-100 py-3 fw-medium">
+            Add to Cart
+        </button>
+   
+        <input type="hidden" name="price" id="price">
+    </form>
+
+    @if($product->usage)
+    <div class="alert mt-4" style="background-color: #d4edda; color: #155724; border-color: #c3e6cb;">
+
+        <strong>Usage Instructions:</strong><br>
+        {{ $product->usage }}
+    </div>
+@endif
+@endauth
+
+@guest
+    <!-- زر تسجيل دخول يظهر لغير المسجلين -->
+    <a href="{{ route('login') }}" class="btn btn-dark w-100 py-3 fw-medium">
+        Login to Add to Cart
+    </a>
+@endguest
+
 
                     <!-- Product Meta -->
-                    <div class="products-meta mt-30">
-                        <p><span>Category:</span> <a href="{{ route('shop', ['category' => $product->category->slug]) }}">{{ $product->category->name }}</a></p>
-                        <p><span>Stock:</span> <span class="{{ $product->stock > 0 ? 'text-success' : 'text-danger' }}">{{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }}</span></p>
+                    <div class="product-meta mt-4 pt-3 border-top">
+                        <div class="d-flex flex-wrap gap-4">
+                            <div class="meta-item">
+                                <span class="fw-medium text-secondary">SKU:</span> 
+                                <span>PL{{ str_pad($product->id, 4, '0', STR_PAD_LEFT) }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="fw-medium text-secondary">Category:</span> 
+                                <a href="{{ route('shop', ['category' => $product->category->slug]) }}" class="text-dark">
+                                    {{ $product->category->name }}
+                                </a>
+                            </div>
+                            <div class="meta-item">
+                                <span class="fw-medium text-secondary">Availability:</span> 
+                                <span class="{{ $product->stock > 0 ? 'text-success' : 'text-danger' }}">
+                                    {{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+      
 
-        <div class="row">
-            <div class="col-12">
-                <div class="product_details_tab section-padding-0-100">
-                    <!-- Tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="care-tab" data-toggle="tab" href="#care" role="tab" aria-controls="care" aria-selected="false">Care Guide</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews (3)</a>
-                        </li>
-                    </ul>
-                    <!-- Tab Content -->
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-                            <div class="description_area">
-                                <p>{{ $product->description }}</p>
-                                <p>This beautiful plant will add a touch of nature to your home or office. Perfect for beginners and experienced plant lovers alike.</p>
-                            </div>
+      
+      
+        
+
+        <!-- Product Tabs -->
+        <div class="product-tabs mt-5 pt-4">
+            <ul class="nav nav-tabs border-0" id="productTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active px-4 py-3 fw-medium" id="description-tab" data-bs-toggle="tab" 
+                            data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">Description</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link px-4 py-3 fw-medium" id="care-tab" data-bs-toggle="tab" 
+                            data-bs-target="#care" type="button" role="tab" aria-controls="care" aria-selected="false">Care Guide</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link px-4 py-3 fw-medium" id="reviews-tab" data-bs-toggle="tab" 
+                            data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content p-4 border border-top-0 rounded-bottom" id="productTabsContent">
+                <!-- Description Tab -->
+                <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                    <div class="product-full-description">
+                        <p class="text-secondary">{{ $product->description }}</p>
+                    </div>
+                </div>
+                
+                <!-- Care Guide Tab -->
+                <div class="tab-pane fade" id="care" role="tabpanel" aria-labelledby="care-tab">
+                    @if($product->care_instructions)
+                    <div class="care-guide">
+                        {!! nl2br(e($product->care_instructions)) !!}
+                    </div>
+                    @else
+                    <div class="alert alert-light">No detailed care information available.</div>
+                    @endif
+                </div>
+                
+                <!-- Reviews Tab -->
+                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                    <div class="reviews-container">
+                        <div class="review-form mb-5">
+                            <h5 class="fw-semibold mb-4">Write a Review</h5>
+                            <form id="reviewForm" method="POST" action="{{ route('reviews.store', ['product_id' => $product->id]) }}">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                
+                                <div class="mb-3">
+                                    <label for="reviewRating" class="form-label fw-medium">Rating</label>
+                                    <select class="form-select py-2" id="reviewRating" name="rating" required>
+                                        <option value="">Select rating</option>
+                                        <option value="5">5 Stars</option>
+                                        <option value="4">4 Stars</option>
+                                        <option value="3">3 Stars</option>
+                                        <option value="2">2 Stars</option>
+                                        <option value="1">1 Star</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="reviewText" class="form-label fw-medium">Your Review</label>
+                                    <textarea class="form-control py-2" id="reviewText" name="comment" rows="3" required></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-dark py-2 px-4">Submit Review</button>
+                            </form>
+                            
                         </div>
-                        <div class="tab-pane fade" id="care" role="tabpanel" aria-labelledby="care-tab">
-                            <div class="care_area">
-                                <ul>
-                                    <li><strong>Light:</strong> Prefers bright, indirect light but can tolerate lower light conditions.</li>
-                                    <li><strong>Water:</strong> Water when the top inch of soil is dry. Avoid overwatering.</li>
-                                    <li><strong>Humidity:</strong> Enjoys moderate to high humidity.</li>
-                                    <li><strong>Temperature:</strong> Keep in temperatures between 18-24°C.</li>
-                                    <li><strong>Fertilizer:</strong> Feed monthly during the growing season with a balanced fertilizer.</li>
-                                </ul>
+                        
+                        <div class="reviews-list">
+                            <h5 class="fw-semibold mb-4">Customer Reviews</h5>
+                            
+                            @forelse($product->reviews as $review)
+                            <div class="review-item mb-4 pb-4 border-bottom">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <h6 class="fw-medium">{{ $review->name }}</h6>
+                                    <div class="rating-stars text-warning">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            @if($i <= $review->rating)
+                                                ★
+                                            @else
+                                                ☆
+                                            @endif
+                                        @endfor
+                                    </div>
+                                </div>
+                                <p class="text-secondary">{{ $review->review }}</p>
+                                <small class="text-muted">Posted on {{ $review->created_at->format('F j, Y') }}</small>
                             </div>
-                        </div>
-                        <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-                            <div class="reviews_area">
-                                <!-- Single Review -->
-                                <div class="single_review mb-15">
-                                    <div class="reviewer_meta d-flex align-items-center mb-4">
-                                        <img src="img/bg-img/user1.jpg" alt="">
-                                        <div class="reviewer-content">
-                                            <h6>Sarah Johnson</h6>
-                                            <div class="ratings">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p>Beautiful plant! Arrived in perfect condition and is thriving in my living room.</p>
-                                </div>
-                                <!-- Single Review -->
-                                <div class="single_review mb-15">
-                                    <div class="reviewer_meta d-flex align-items-center mb-4">
-                                        <img src="img/bg-img/user2.jpg" alt="">
-                                        <div class="reviewer-content">
-                                            <h6>Michael Brown</h6>
-                                            <div class="ratings">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star-half-alt"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p>Great addition to my plant collection. The care instructions were very helpful.</p>
-                                </div>
-                                <!-- Single Review -->
-                                <div class="single_review">
-                                    <div class="reviewer_meta d-flex align-items-center mb-4">
-                                        <img src="img/bg-img/user3.jpg" alt="">
-                                        <div class="reviewer-content">
-                                            <h6>Emily Davis</h6>
-                                            <div class="ratings">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p>Fast delivery and the plant was very well packaged. Highly recommend!</p>
-                                </div>
-                            </div>
+                            @empty
+                            <div class="alert alert-light">No reviews yet. Be the first to review this product!</div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -209,49 +253,304 @@
 
         <!-- Related Products -->
         @if($relatedProducts->count() > 0)
-        <div class="row">
-            <div class="col-12">
-                <div class="section-heading text-center">
-                    <h2>Related Products</h2>
-                </div>
+        <section class="related-products mt-5 pt-5">
+            <div class="section-header mb-5">
+                <h2 class="fw-bold mb-3">You May Also Like</h2>
+                <p class="text-secondary">Discover similar products</p>
             </div>
-        </div>
-
-        <div class="row">
-            @foreach($relatedProducts as $product)
-            <!-- Single Product Area -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="single-product-area mb-50">
-                    <!-- Product Image -->
-                    <div class="product-img">
-                        <a href="{{ route('shop-details', $product) }}">
-                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
-                        </a>
-                        @if($product->is_hot)
-                        <!-- Product Tag -->
-                        <div class="product-tag">
-                            <a href="#">Hot</a>
+            
+            <div class="row g-4">
+                @foreach($relatedProducts as $related)
+                <div class="col-md-6 col-lg-3">
+                    <div class="product-card h-100 border-0 bg-white rounded-3 overflow-hidden">
+                        <div class="product-thumbnail position-relative">
+                            <a href="{{ route('shop-details', $related) }}">
+                                <img src="{{ asset('storage/' . $related->image) }}" 
+                                     alt="{{ $related->name }}" class="img-fluid w-100" style="height: 250px; object-fit: cover;">
+                            </a>
                         </div>
-                        @endif
-                        <div class="product-meta d-flex">
-                            <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a>
-                            <a href="cart.html" class="add-to-cart-btn">Add to cart</a>
-                            <a href="#" class="compare-btn"><i class="arrow_left-right_alt"></i></a>
+                        
+                        <div class="product-info p-3">
+                            <h5 class="product-title mb-1 fw-medium">
+                                <a href="{{ route('shop-details', $related) }}" class="text-dark text-decoration-none">{{ $related->name }}</a>
+                            </h5>
+                            <div class="product-price mb-2">
+                                <span class="current-price text-dark fw-bold">${{ number_format($related->price, 2) }}</span>
+                                @if($related->original_price)
+                                <span class="original-price text-muted text-decoration-line-through ms-1">${{ number_format($related->original_price, 2) }}</span>
+                                @endif
+                            </div>
+                            <a href="{{ route('shop-details', $related) }}" class="btn btn-outline-dark w-100 py-2">
+                                View Details
+                            </a>
                         </div>
                     </div>
-                    <!-- Product Info -->
-                    <div class="product-info mt-15 text-center">
-                        <a href="{{ route('shop-details', $product) }}">
-                            <p>{{ $product->name }}</p>
-                        </a>
-                        <h6>${{ number_format($product->price, 2) }}</h6>
-                    </div>
                 </div>
+                @endforeach
             </div>
-            @endforeach
-        </div>
+        </section>
         @endif
     </div>
 </section>
 <!-- Product Details Area End -->
 @endsection
+
+@push('styles')
+<style>
+/* Main Product Gallery */
+.product-gallery .main-image {
+    border: 1px solid #eaeaea;
+    transition: all 0.3s ease;
+}
+
+.thumbnail-item {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.thumbnail-item:hover, .thumbnail-item.active {
+    border-color: #000;
+}
+
+/* Product Info Section */
+.product-info {
+    background: #fff;
+}
+
+.product-title {
+    font-size: 2rem;
+    line-height: 1.2;
+}
+
+.price-section {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.current-price {
+    font-size: 1.75rem;
+}
+
+.discount-badge {
+    font-size: 0.85rem;
+}
+
+
+
+.tab-content {
+    background: #fff;
+    border-color: #eaeaea;
+}
+
+/* Review Stars */
+.rating-stars {
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+/* Related Products */
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.product-thumbnail img {
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-thumbnail img {
+    transform: scale(1.03);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .product-title {
+        font-size: 1.5rem;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+}
+
+
+</style>
+@endpush
+
+@push('scripts')
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const reviewForm = document.getElementById('reviewForm');
+    
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch(this.action, {
+                method: this.method,
+                body: new FormData(this),
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Thank you for your review!');
+                    location.reload(); 
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // تفعيل تبويبات Bootstrap
+    const tabElms = document.querySelectorAll('button[data-bs-toggle="tab"]');
+    tabElms.forEach(tabElm => {
+        tabElm.addEventListener('click', function(event) {
+            const tabTrigger = new bootstrap.Tab(this);
+            tabTrigger.show();
+        });
+    });
+
+    // معالجة إرسال نموذج التقييم
+    const reviewForm = document.getElementById('reviewForm');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch(this.action, {
+                method: this.method,
+                body: new FormData(this),
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); 
+                } else {
+                    alert('Error submitting review');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
+});
+// أضف هذا الكود JavaScript بعد الفورم
+document.getElementById('reviewForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    fetch(this.action, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: new FormData(this)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Review submitted successfully!');
+            location.reload();
+        } else {
+            alert(data.message || 'An error occurred while saving.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Network error occurred.');
+    });
+});
+
+
+
+document.getElementById('reviewForm').addEventListener('submit', function(e) {
+        const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+
+        if (!isAuthenticated) {
+            e.preventDefault();
+            window.location.href = "{{ route('login') }}";
+        }
+    });
+
+
+    document.querySelector('.add-to-cart-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form from reloading the page
+
+    let formData = new FormData(this);
+
+    fetch("{{ route('cart.add') }}", {
+        method: "POST",
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateCartQuantity(); // Update the cart item count
+            alert("Product successfully added to cart!"); // You can replace this with a custom notification
+        }
+    });
+});
+
+function updateCartQuantity() {
+    fetch("{{ route('cart.items') }}")
+    .then(response => response.json())
+    .then(data => {
+        let totalQuantity = 0;
+        data.forEach(item => {
+            totalQuantity += item.quantity; // إجمالي الكمية في السلة
+        });
+        document.querySelector('.cart-quantity').textContent = totalQuantity;
+    });
+}
+
+
+document.getElementById('size').addEventListener('change', function() {
+    let size = this.value;
+    let basePrice = parseFloat(document.getElementById('product-price').dataset.base);
+    let finalPrice = basePrice;
+
+    // تعديل السعر بناء على الحجم
+    if (size === 'medium') {
+        finalPrice += 2;
+    } else if (size === 'large') {
+        finalPrice += 4;
+    }
+
+    document.getElementById('product-price').textContent = `$${finalPrice.toFixed(2)}`;
+});
+
+
+
+</script>
+
+
+
+
+@endpush

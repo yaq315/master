@@ -6,10 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens,HasFactory, Notifiable;
 
     protected $fillable = [
         'name',
@@ -43,15 +44,29 @@ class User extends Authenticatable
         return $this->role === 'user';
     }
 
-    public function getProfilePhotoUrlAttribute()
+//     public function getProfilePhotoUrlAttribute()
+// {
+//     return $this->profile_photo_path 
+//         ? asset('storage/' . $this->profile_photo_path)
+//         : $this->defaultProfilePhotoUrl();
+// }
+
+// protected function defaultProfilePhotoUrl()
+// {
+//     return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&color=FFFFFF&background=4e73df';
+// }
+
+public function reviews()
 {
-    return $this->profile_photo_path 
-        ? asset('storage/' . $this->profile_photo_path)
-        : $this->defaultProfilePhotoUrl();
+    return $this->hasMany(Review::class);
 }
 
-protected function defaultProfilePhotoUrl()
+
+public function cartItems()
 {
-    return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&color=FFFFFF&background=4e73df';
+    return $this->hasMany(\App\Models\Cart::class);
 }
+
+
+
 }

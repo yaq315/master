@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
+            $table->text('care_instructions')->nullable(); // طريقة العناية
+            $table->text('usage')->nullable();  
             $table->decimal('price', 8, 2);
             $table->decimal('original_price', 8, 2)->nullable();
             $table->string('image');
