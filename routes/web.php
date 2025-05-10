@@ -51,6 +51,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+Route::delete('categories/{category}/delete-image', [\App\Http\Controllers\Admin\CategoryController::class, 'deleteImage'])
+     ->name('categories.delete-image');
+
     // المستخدمين
     Route::resource('users', UserController::class)->except(['show']);
 

@@ -1,6 +1,13 @@
 @extends('admin.layout')
 
 @section('content')
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
     <h1>Categories</h1>
     <a href="{{ route('admin.categories.create') }}" class="btn btn-primary mb-3">Add New Category</a>
 
@@ -25,7 +32,9 @@
                 <tr>
                     <td>
                         @if($category->image)
-                            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" style="max-width: 50px;">
+                           <img src="{{ asset('storage/' . $category->image) }}" 
+             alt="{{ $category->name }}"
+             style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
                         @else
                             No Image
                         @endif

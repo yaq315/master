@@ -22,25 +22,34 @@ class CategoryController extends Controller
         return view('admin.categories.create', compact('categories'));
     }
 
- public function store(Request $request)
+public function store(Request $request)
 {
-    $request->validate([
+    $validated = $request->validate([
         'name' => 'required|string|max:255',
         'slug' => 'required|string|unique:categories,slug',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'description' => 'nullable|string',
+        'is_active' => 'nullable|boolean',
     ]);
 
     try {
-        Category::create([
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'is_active' => $request->has('is_active'),
-        ]);
+        $categoryData = [
+            'name' => $validated['name'],
+            'slug' => $validated['slug'],
+            'description' => $validated['description'],
+            'is_active' => $request->boolean('is_active'), // This properly converts to boolean
+        ];
 
-        return redirect()->route('admin.categories.index')
-               ->with('success', 'Category created successfully!');
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('categories', 'public');
+            $categoryData['image'] = $imagePath;
+        }
+
+        Category::create($categoryData);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully!');
     } catch (\Exception $e) {
-        return back()->with('error', 'Error: '.$e->getMessage())
-               ->withInput();
+        return back()->with('error', 'An error occurred: ' . $e->getMessage());
     }
 }
 
@@ -50,40 +59,38 @@ class CategoryController extends Controller
         return view('admin.categories.edit', compact('category', 'categories'));
     }
 
-    public function update(Request $request, Category $category)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|unique:categories,slug,' . $category->id,
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'parent_id' => 'nullable|exists:categories,id',
-            'is_active' => 'nullable|boolean',
-        ]);
+public function update(Request $request, Category $category)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'slug' => 'required|string|unique:categories,slug,' . $category->id,
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'description' => 'nullable|string',
+        'is_active' => 'nullable|boolean',
+    ]);
 
-        try {
-            $categoryData = [
-                'name' => $validated['name'],
-                'slug' => $validated['slug'],
-                'description' => $validated['description'],
-                'parent_id' => $validated['parent_id'],
-                'is_active' => $validated['is_active'] ?? $category->is_active,
-            ];
+    try {
+        $updateData = [
+            'name' => $validated['name'],
+            'slug' => $validated['slug'],
+            'description' => $validated['description'],
+            'is_active' => $request->boolean('is_active'), // Proper boolean conversion
+        ];
 
-            if ($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
+            if ($category->image) {
                 Storage::disk('public')->delete($category->image);
-                $imagePath = $request->file('image')->store('categories', 'public');
-                $categoryData['image'] = $imagePath;
             }
-
-            $category->update($categoryData);
-
-            return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully!');
-        } catch (\Exception $e) {
-            return back()->with('error', 'An error occurred: ' . $e->getMessage())->withInput();
+            $updateData['image'] = $request->file('image')->store('categories', 'public');
         }
-    }
 
+        $category->update($updateData);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully!');
+    } catch (\Exception $e) {
+        return back()->with('error', 'An error occurred: ' . $e->getMessage());
+    }
+}
     public function destroy(Category $category)
     {
         if ($category->image) {
@@ -93,14 +100,14 @@ class CategoryController extends Controller
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully!');
     }
 
-    public function deleteImage(Category $category)
-{
-    if ($category->image) {
-        Storage::disk('public')->delete($category->image);
-        $category->update(['image' => null]);
-        return back()->with('success', 'Image deleted successfully');
-    }
-    
-    return back()->with('error', 'No image to delete');
-}
+// public function deleteImage(Category $category)
+// {
+//     if ($category->image) {
+//         Storage::disk('public')->delete($category->image);
+//         $category->update(['image' => null]);
+//         return back()->with('success', 'Image deleted successfully');
+//     }
+//     return back()->with('error', 'No image to delete');
+// }
+
 }

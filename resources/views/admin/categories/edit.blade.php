@@ -1,9 +1,19 @@
 @extends('admin.layout')
 
 @section('content')
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <div class="container mt-4">
     <h2>Edit Category</h2>
-    <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+   <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+
         @csrf
         @method('PUT')
 
@@ -26,26 +36,21 @@
         </div>
 
         <div class="mb-3">
-            <label for="image" class="form-label">Current Image</label>
-            @if($category->image)
-                <div>
-                    <img src="{{ asset('storage/' . $category->image) }}" alt="Category Image" style="max-height: 100px;">
-                    <a href="{{ route('admin.categories.delete-image', $category->id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete Image</a>
-                </div>
-            @else
-                <p>No image uploaded</p>
-            @endif
+          
+            
             <label for="image" class="form-label mt-2">New Image (optional)</label>
             <input type="file" name="image" class="form-control @error('image') is-invalid @enderror">
             @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
 
-        <div class="mb-3 form-check">
-            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" {{ old('is_active', $category->is_active) ? 'checked' : '' }}>
-            <label class="form-check-label" for="is_active">Active</label>
-        </div>
+    <div class="mb-3 form-check">
+    <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1" 
+        {{ old('is_active', $category->is_active ?? true) ? 'checked' : '' }}>
+    <label class="form-check-label" for="is_active">Active</label>
+</div>
 
         <button type="submit" class="btn btn-success">Update Category</button>
+
     </form>
 </div>
 @endsection
