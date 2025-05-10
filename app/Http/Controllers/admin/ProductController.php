@@ -5,100 +5,112 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $query = Product::with(['category', 'images', 'tags'])
-            ->withCount('reviews');
-
-        // البحث والتصفية
-        if ($request->has('search')) {
-            $query->where('name', 'like', '%'.$request->search.'%');
-        }
-
-        if ($request->has('category')) {
-            $query->where('category_id', $request->category);
-        }
-
-        if ($request->has('status')) {
-            $query->where('is_active', $request->status === 'active');
-        }
-
-        $products = $query->latest()->paginate(15);
+        $products = Product::with('category')->latest()->paginate(10);
         $categories = Category::all();
-
         return view('admin.products.index', compact('products', 'categories'));
     }
 
     public function create()
     {
         $categories = Category::all();
-        $tags = Tag::all();
-        return view('admin.products.create', compact('categories', 'tags'));
+        
+        // Path to your external images directory
+        $externalImagePath = 'C:\Users\Orange\Desktop\image\products'; // Update this path
+        
+        // Get all image files from the external directory
+        $files = [];
+        if (File::exists($externalImagePath)) {
+            $files = collect(File::files($externalImagePath))
+                ->filter(function ($file) {
+                    return in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'png', 'gif']);
+                })
+                ->map(function ($file) {
+                    return $file->getFilename();
+                })
+                ->toArray();
+        }
+        
+        return view('admin.products.create', compact('categories', 'files'));
     }
+public function store(Request $request)
+{
+    // 1. Validate incoming request data
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'price' => 'required|numeric|min:0',
+        'category_slug' => 'required|exists:categories,slug',
+        'image' => 'nullable|string',
+        'stock' => 'required|integer|min:0',
+    ]);
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'sale_price' => 'nullable|numeric|min:0',
-            'sku' => 'required|unique:products,sku',
-            'quantity' => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
-            'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean'
-        ]);
+    // 2. Log incoming data for debugging
+    \Log::debug('Received Data:', $request->all());
 
-        $product = Product::create([
+    try {
+        // 3. Check if image exists in external directory
+        $externalImagePath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, 'C:/Users/Orange/Desktop/image/products/' . $validated['image']);
+        if (!file_exists($externalImagePath)) {
+            \Log::error('Image not found: ' . $externalImagePath);
+            return back()->with('error', 'Image not found in the specified path')->withInput();
+        }
+
+        // 4. Copy the image to storage
+        $storagePath = 'products/' . $validated['image'];
+        $copyResult = Storage::disk('public')->put($storagePath, file_get_contents($externalImagePath));
+
+        if (!$copyResult) {
+            \Log::error('Failed to copy image to storage');
+            return back()->with('error', 'Failed to save the image')->withInput();
+        }
+
+        // 5. Prepare product data
+        $productData = [
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
             'description' => $validated['description'],
-            'short_description' => Str::limit($validated['description'], 150),
             'price' => $validated['price'],
-            'sale_price' => $validated['sale_price'],
-            'sku' => $validated['sku'],
-            'quantity' => $validated['quantity'],
-            'category_id' => $validated['category_id'],
-            'is_featured' => $request->has('is_featured'),
-            'is_active' => $request->has('is_active'),
-            'user_id' => auth()->id()
+            'original_price' => $request->input('original_price', null),
+            'stock' => $validated['stock'],
+            'category_id' => Category::where('slug', $validated['category_slug'])->first()->id,
+            'image' => $request->image ? $storagePath : null,
+            'is_active' => $request->has('is_active') ? 1 : 0,
+            'is_featured' => $request->has('is_featured') ? 1 : 0,
+            'care_instructions' => $request->input('care_instructions', ''),
+            'usage' => $request->input('usage', ''),
+        ];
+
+        \Log::debug('Attempting to create product with:', $productData);
+
+        // 6. Create the product
+        $product = Product::create($productData);
+
+        \Log::info('Product created successfully', ['id' => $product->id]);
+
+        return redirect()->route('admin.products.index')
+               ->with('success', 'Product added successfully!');
+
+    } catch (\Exception $e) {
+        \Log::error('Product creation failed: ' . $e->getMessage(), [
+            'exception' => $e,
+            'trace' => $e->getTraceAsString()
         ]);
-
-        // إضافة العلامات
-        if (!empty($validated['tags'])) {
-            $product->tags()->sync($validated['tags']);
-        }
-
-        // رفع الصور
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('products', 'public');
-                $product->images()->create(['image_path' => $path]);
-            }
-        }
-
-        return redirect()->route('admin.products.index')->with('success', 'تم إضافة المنتج بنجاح');
+        return back()->with('error', 'An error occurred: ' . $e->getMessage())->withInput();
     }
+}
+
 
     public function edit(Product $product)
     {
         $categories = Category::all();
-        $tags = Tag::all();
-        $selectedTags = $product->tags->pluck('id')->toArray();
-        
-        return view('admin.products.edit', compact('product', 'categories', 'tags', 'selectedTags'));
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, Product $product)
@@ -106,64 +118,45 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'care_instructions' => 'nullable|string',
+            'usage' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'sale_price' => 'nullable|numeric|min:0',
-            'sku' => 'required|unique:products,sku,'.$product->id,
-            'quantity' => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
-            'new_images' => 'nullable|array',
-            'new_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean'
+            'original_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'category_slug' => 'required|exists:categories,slug',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'is_active' => 'nullable|boolean',
+            'is_featured' => 'nullable|boolean',
         ]);
 
-        $product->update([
+        $updateData = [
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
             'description' => $validated['description'],
-            'short_description' => Str::limit($validated['description'], 150),
+            'care_instructions' => $validated['care_instructions'],
+            'usage' => $validated['usage'],
             'price' => $validated['price'],
-            'sale_price' => $validated['sale_price'],
-            'sku' => $validated['sku'],
-            'quantity' => $validated['quantity'],
-            'category_id' => $validated['category_id'],
+            'original_price' => $validated['original_price'],
+            'stock' => $validated['stock'],
+            'category_id' => Category::where('slug', $validated['category_slug'])->value('id'),
+            'is_active' => $request->has('is_active'),
             'is_featured' => $request->has('is_featured'),
-            'is_active' => $request->has('is_active')
-        ]);
+        ];
 
-        // تحديث العلامات
-        $product->tags()->sync($validated['tags'] ?? []);
-
-        // إضافة صور جديدة
-        if ($request->hasFile('new_images')) {
-            foreach ($request->file('new_images') as $image) {
-                $path = $image->store('products', 'public');
-                $product->images()->create(['image_path' => $path]);
-            }
+        if ($request->hasFile('image')) {
+            Storage::disk('public')->delete($product->image);
+            $imagePath = $request->file('image')->store('products', 'public');
+            $updateData['image'] = $imagePath;
         }
 
-        return redirect()->route('admin.products.index')->with('success', 'تم تحديث المنتج بنجاح');
+        $product->update($updateData);
+
+        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }
 
     public function destroy(Product $product)
     {
-        // حذف الصور من التخزين
-        foreach ($product->images as $image) {
-            Storage::disk('public')->delete($image->image_path);
-            $image->delete();
-        }
-
+        Storage::disk('public')->delete($product->image);
         $product->delete();
-        return back()->with('success', 'تم حذف المنتج بنجاح');
-    }
-
-    public function deleteImage($imageId)
-    {
-        $image = \App\Models\ProductImage::findOrFail($imageId);
-        Storage::disk('public')->delete($image->image_path);
-        $image->delete();
-        return back()->with('success', 'تم حذف الصورة بنجاح');
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
     }
 }

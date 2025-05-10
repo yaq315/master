@@ -49,7 +49,8 @@ class ProfileController extends Controller
         $user->update($updateData);
     
         // Change this line to use the correct route name
-        return redirect()->route('admin.profile.show')->with('success', 'Profile updated successfully');
+        return redirect()->route('admin.profile')->with('success', 'Profile updated successfully');
+
     }
 
     public function userProfile()

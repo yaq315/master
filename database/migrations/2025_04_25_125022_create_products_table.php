@@ -22,11 +22,14 @@ return new class extends Migration
             $table->decimal('original_price', 8, 2)->nullable();
             $table->string('image');
             $table->json('images')->nullable();
+            $table->boolean('is_active')->default(1);
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_hot')->default(false);
             $table->boolean('is_on_sale')->default(false);
             $table->integer('stock')->default(0);
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
+       
+      
             $table->timestamps();
         });
     }

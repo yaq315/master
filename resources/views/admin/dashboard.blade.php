@@ -12,9 +12,11 @@
     <!-- Navbar -->
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-      <div class="row">
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
+        
+        <!-- Total Messages -->
+        <div class="col d-flex align-items-stretch">
+          <div class="card w-100 h-100">
             <div class="card-body p-3">
               <div class="row">
                 <div class="col-8">
@@ -34,8 +36,10 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
+    
+        <!-- Unread Messages -->
+        <div class="col d-flex align-items-stretch">
+          <div class="card w-100 h-100">
             <div class="card-body p-3">
               <div class="row">
                 <div class="col-8">
@@ -55,8 +59,10 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
+    
+        <!-- Total Users -->
+        <div class="col d-flex align-items-stretch">
+          <div class="card w-100 h-100">
             <div class="card-body p-3">
               <div class="row">
                 <div class="col-8">
@@ -76,8 +82,10 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-3 col-sm-6">
-          <div class="card">
+    
+        <!-- Total Products -->
+        <div class="col d-flex align-items-stretch">
+          <div class="card w-100 h-100">
             <div class="card-body p-3">
               <div class="row">
                 <div class="col-8">
@@ -97,31 +105,31 @@
             </div>
           </div>
         </div>
-      </div>
-      
-      
-      <!-- Additional rows from original template can be kept or removed as needed -->
-      
     
+      </div>
     </div>
+    
   
     <div class="row mt-4">
-      <div class="col-lg-7 mb-lg-0 mb-4">
-        <div class="card z-index-2 h-100">
-          <div class="card-header pb-0 pt-3 bg-transparent">
+
+
+  <div class="col-lg-7 mb-lg-0 mb-4">
+    <div class="card z-index-2 h-100">
+        <div class="card-header pb-0 pt-3 bg-transparent">
             <h6 class="text-capitalize">Sales overview</h6>
             <p class="text-sm mb-0">
-              <i class="fa fa-arrow-up text-success"></i>
-              <span class="font-weight-bold">4% more</span> in 2021
+                <i class="fa fa-arrow-up text-success"></i>
+                <span class="font-weight-bold">Live Data</span> from {{ now()->year }}
             </p>
-          </div>
-          <div class="card-body p-3">
-            <div class="chart">
-              <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
-            </div>
-          </div>
         </div>
-      </div>
+        <div class="card-body p-3">
+            <div class="chart">
+                <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
       <div class="col-lg-5">
         <div class="card card-carousel overflow-hidden h-100 p-0">
           <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
@@ -278,7 +286,7 @@
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div>
-                                            <img src="{{ asset('img/team-2.jpg') }}" class="avatar avatar-sm me-3" alt="user1">
+                                            {{-- <img src="{{ asset('img/team-2.jpg') }}" class="avatar avatar-sm me-3" alt="user1"> --}}
                                         </div>
                                         <div class="d-flex flex-column justify-content-center">
                                             <h6 class="mb-0 text-sm">{{ $user->name }}</h6>

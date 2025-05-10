@@ -2751,7 +2751,7 @@ img {
                                 <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">About</a></li>
                 
                                 <!-- Dropdown -->
-                                <li class="nav-item dropdown">
+                                {{-- <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
                                     <ul class="dropdown-menu dropdown-menu-dark">
                                         <li><a class="dropdown-item" href="{{ route('home') }}">Home</a></li>
@@ -2778,7 +2778,7 @@ img {
                                         </li>
                                         <li><a class="dropdown-item" href="{{ route('contact') }}">Contact</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
                 
                                 <li class="nav-item"><a class="nav-link" href="{{ route('shop') }}">Shop</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Contact</a></li>
@@ -2931,249 +2931,266 @@ img {
         </div>
     </footer>
   <!-- Scripts -->
-  <script src="js/jquery/jquery-2.2.4.min.js"></script>
-  <!-- Popper js -->
-  <script src="js/bootstrap/popper.min.js"></script>
-  <!-- Bootstrap js -->
-  <script src="js/bootstrap/bootstrap.min.js"></script>
-  <!-- All Plugins js -->
-  <script src="js/plugins/plugins.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <!-- Active js -->
-  <script >
-  (function ($) {
-      'use strict';
+
   
-      var browserWindow = $(window);
-  
-      // :: 1.0 Preloader Active Code
-      browserWindow.on('load', function () {
-          $('.preloader').fadeOut('slow', function () {
-              $(this).remove();
-          });
-      });
-  
-      // :: 2.0 Nav Active Code
-      if ($.fn.classyNav) {
-          $('#alazeaNav').classyNav();
-      }
-  
-      // :: 3.0 Search Active Code
-      $('#searchIcon').on('click', function () {
-          $('.search-form').toggleClass('active');
-      });
-      $('.closeIcon').on('click', function () {
-          $('.search-form').removeClass('active');
-      });
-  
-      // :: 4.0 Sliders Active Code
-      if ($.fn.owlCarousel) {
-          var welcomeSlide = $('.hero-post-slides');
-          var testiSlides = $('.testimonials-slides');
-          var portfolioSlides = $('.portfolio-slides');
-  
-          welcomeSlide.owlCarousel({
-              items: 1,
-              margin: 0,
-              loop: true,
-              nav: false,
-              dots: false,
-              autoplay: true,
-              center: true,
-              autoplayTimeout: 5000,
-              smartSpeed: 1000
-          });
-  
-          testiSlides.owlCarousel({
-              items: 1,
-              margin: 0,
-              loop: true,
-              nav: false,
-              dots: true,
-              autoplay: true,
-              autoplayTimeout: 5000,
-              smartSpeed: 700,
-              animateIn: 'fadeIn',
-              animateOut: 'fadeOut'
-          });
-  
-          portfolioSlides.owlCarousel({
-              items: 2,
-              margin: 30,
-              loop: true,
-              nav: true,
-              navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
-              dots: true,
-              autoplay: false,
-              autoplayTimeout: 5000,
-              smartSpeed: 700,
-              center: true
-          });
-      }
-  
-      // :: 5.0 Masonary Gallery Active Code
-      if ($.fn.imagesLoaded) {
-          $('.alazea-portfolio').imagesLoaded(function () {
-              // filter items on button click
-              $('.portfolio-filter').on('click', 'button', function () {
-                  var filterValue = $(this).attr('data-filter');
-                  $grid.isotope({
-                      filter: filterValue
-                  });
-              });
-              // init Isotope
-              var $grid = $('.alazea-portfolio').isotope({
-                  itemSelector: '.single_portfolio_item',
-                  percentPosition: true,
-                  masonry: {
-                      columnWidth: '.single_portfolio_item'
-                  }
-              });
-          });
-      }
-  
-      // :: 6.0 magnificPopup Active Code
-      if ($.fn.magnificPopup) {
-          $('.portfolio-img, .product-img').magnificPopup({
-              gallery: {
-                  enabled: true
-              },
-              type: 'image'
-          });
-          $('.video-icon').magnificPopup({
-              type: 'iframe'
-          });
-      }
-  
-      // :: 7.0 Barfiller Active Code
-      if ($.fn.barfiller) {
-          $('#bar1').barfiller({
-              tooltip: true,
-              duration: 1000,
-              barColor: '#70c745',
-              animateOnResize: true
-          });
-          $('#bar2').barfiller({
-              tooltip: true,
-              duration: 1000,
-              barColor: '#70c745',
-              animateOnResize: true
-          });
-          $('#bar3').barfiller({
-              tooltip: true,
-              duration: 1000,
-              barColor: '#70c745',
-              animateOnResize: true
-          });
-          $('#bar4').barfiller({
-              tooltip: true,
-              duration: 1000,
-              barColor: '#70c745',
-              animateOnResize: true
-          });
-      }
-  
-      // :: 8.0 ScrollUp Active Code
-      if ($.fn.scrollUp) {
-          browserWindow.scrollUp({
-              scrollSpeed: 1500,
-              scrollText: '<i class="fa fa-angle-up"></i>'
-          });
-      }
-  
-      // :: 9.0 CounterUp Active Code
-      if ($.fn.counterUp) {
-          $('.counter').counterUp({
-              delay: 10,
-              time: 2000
-          });
-      }
-  
-      // :: 10.0 Sticky Active Code
-      if ($.fn.sticky) {
-          $(".alazea-main-menu").sticky({
-              topSpacing: 0
-          });
-      }
-  
-      // :: 11.0 Tooltip Active Code
-      if ($.fn.tooltip) {
-          $('[data-toggle="tooltip"]').tooltip()
-      }
-  
-      // :: 12.0 Price Range Active Code
-      $('.slider-range-price').each(function () {
-          var min = jQuery(this).data('min');
-          var max = jQuery(this).data('max');
-          var unit = jQuery(this).data('unit');
-          var value_min = jQuery(this).data('value-min');
-          var value_max = jQuery(this).data('value-max');
-          var label_result = jQuery(this).data('label-result');
-          var t = $(this);
-          $(this).slider({
-              range: true,
-              min: min,
-              max: max,
-              values: [value_min, value_max],
-              slide: function (event, ui) {
-                  var result = label_result + " " + unit + ui.values[0] + ' - ' + unit + ui.values[1];
-                  console.log(t);
-                  t.closest('.slider-range').find('.range-price').html(result);
-              }
-          });
-      })
-  
-      // :: 13.0 prevent default a click
-      $('a[href="#"]').on('click', function ($) {
-          $.preventDefault();
-      });
-  
-      // :: 14.0 wow Active Code
-      if (browserWindow.width() > 767) {
-          new WOW().init();
-      }
-  
-  })(jQuery);
-  </script>
-  <script>
-    window.addEventListener('scroll', function () {
-        const navbar = document.getElementById('mainNavbar');
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
+</body>
+
+<script src="js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<script src="js/bootstrap/popper.min.js"></script>
+<!-- Bootstrap js -->
+<script src="js/bootstrap/bootstrap.min.js"></script>
+<!-- All Plugins js -->
+<script src="js/plugins/plugins.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Active js -->
+<script >
+(function ($) {
+    'use strict';
+
+    var browserWindow = $(window);
+
+    // :: 1.0 Preloader Active Code
+    browserWindow.on('load', function () {
+        $('.preloader').fadeOut('slow', function () {
+            $(this).remove();
+        });
     });
+
+    // :: 2.0 Nav Active Code
+    if ($.fn.classyNav) {
+        $('#alazeaNav').classyNav();
+    }
+
+    // :: 3.0 Search Active Code
+    $('#searchIcon').on('click', function () {
+        $('.search-form').toggleClass('active');
+    });
+    $('.closeIcon').on('click', function () {
+        $('.search-form').removeClass('active');
+    });
+
+    // :: 4.0 Sliders Active Code
+    if ($.fn.owlCarousel) {
+        var welcomeSlide = $('.hero-post-slides');
+        var testiSlides = $('.testimonials-slides');
+        var portfolioSlides = $('.portfolio-slides');
+
+        welcomeSlide.owlCarousel({
+            items: 1,
+            margin: 0,
+            loop: true,
+            nav: false,
+            dots: false,
+            autoplay: true,
+            center: true,
+            autoplayTimeout: 5000,
+            smartSpeed: 1000
+        });
+
+        testiSlides.owlCarousel({
+            items: 1,
+            margin: 0,
+            loop: true,
+            nav: false,
+            dots: true,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            smartSpeed: 700,
+            animateIn: 'fadeIn',
+            animateOut: 'fadeOut'
+        });
+
+        portfolioSlides.owlCarousel({
+            items: 2,
+            margin: 30,
+            loop: true,
+            nav: true,
+            navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+            dots: true,
+            autoplay: false,
+            autoplayTimeout: 5000,
+            smartSpeed: 700,
+            center: true
+        });
+    }
+
+    // :: 5.0 Masonary Gallery Active Code
+    if ($.fn.imagesLoaded) {
+        $('.alazea-portfolio').imagesLoaded(function () {
+            // filter items on button click
+            $('.portfolio-filter').on('click', 'button', function () {
+                var filterValue = $(this).attr('data-filter');
+                $grid.isotope({
+                    filter: filterValue
+                });
+            });
+            // init Isotope
+            var $grid = $('.alazea-portfolio').isotope({
+                itemSelector: '.single_portfolio_item',
+                percentPosition: true,
+                masonry: {
+                    columnWidth: '.single_portfolio_item'
+                }
+            });
+        });
+    }
+
+    // :: 6.0 magnificPopup Active Code
+    if ($.fn.magnificPopup) {
+        $('.portfolio-img, .product-img').magnificPopup({
+            gallery: {
+                enabled: true
+            },
+            type: 'image'
+        });
+        $('.video-icon').magnificPopup({
+            type: 'iframe'
+        });
+    }
+
+    // :: 7.0 Barfiller Active Code
+    if ($.fn.barfiller) {
+        $('#bar1').barfiller({
+            tooltip: true,
+            duration: 1000,
+            barColor: '#70c745',
+            animateOnResize: true
+        });
+        $('#bar2').barfiller({
+            tooltip: true,
+            duration: 1000,
+            barColor: '#70c745',
+            animateOnResize: true
+        });
+        $('#bar3').barfiller({
+            tooltip: true,
+            duration: 1000,
+            barColor: '#70c745',
+            animateOnResize: true
+        });
+        $('#bar4').barfiller({
+            tooltip: true,
+            duration: 1000,
+            barColor: '#70c745',
+            animateOnResize: true
+        });
+    }
+
+    // :: 8.0 ScrollUp Active Code
+    if ($.fn.scrollUp) {
+        browserWindow.scrollUp({
+            scrollSpeed: 1500,
+            scrollText: '<i class="fa fa-angle-up"></i>'
+        });
+    }
+
+    // :: 9.0 CounterUp Active Code
+    if ($.fn.counterUp) {
+        $('.counter').counterUp({
+            delay: 10,
+            time: 2000
+        });
+    }
+
+    // :: 10.0 Sticky Active Code
+    if ($.fn.sticky) {
+        $(".alazea-main-menu").sticky({
+            topSpacing: 0
+        });
+    }
+
+    // :: 11.0 Tooltip Active Code
+    if ($.fn.tooltip) {
+        $('[data-toggle="tooltip"]').tooltip()
+    }
+
+    // :: 12.0 Price Range Active Code
+    $('.slider-range-price').each(function () {
+        var min = jQuery(this).data('min');
+        var max = jQuery(this).data('max');
+        var unit = jQuery(this).data('unit');
+        var value_min = jQuery(this).data('value-min');
+        var value_max = jQuery(this).data('value-max');
+        var label_result = jQuery(this).data('label-result');
+        var t = $(this);
+        $(this).slider({
+            range: true,
+            min: min,
+            max: max,
+            values: [value_min, value_max],
+            slide: function (event, ui) {
+                var result = label_result + " " + unit + ui.values[0] + ' - ' + unit + ui.values[1];
+                console.log(t);
+                t.closest('.slider-range').find('.range-price').html(result);
+            }
+        });
+    })
+
+    // :: 13.0 prevent default a click
+    $('a[href="#"]').on('click', function ($) {
+        $.preventDefault();
+    });
+
+    // :: 14.0 wow Active Code
+    if (browserWindow.width() > 767) {
+        new WOW().init();
+    }
+
+})(jQuery);
+</script>
+<script>
+  window.addEventListener('scroll', function () {
+      const navbar = document.getElementById('mainNavbar');
+      if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+      } else {
+          navbar.classList.remove('scrolled');
+      }
+  });
 </script>
 <script>
 // إذا كنت تستخدم jQuery
 $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
+$('[data-toggle="tooltip"]').tooltip()
 });
 
 // إذا كنت تستخدم Bootstrap 5 vanilla JS
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl)
+return new bootstrap.Tooltip(tooltipTriggerEl)
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-  // JavaScript لتحديث عدد المنتجات في السلة عند إضافة منتج
-  document.querySelector('.add-to-cart-form').addEventListener('submit', function(event) {
+// JavaScript لتحديث عدد المنتجات في السلة عند إضافة منتج
+document.querySelector('.add-to-cart-form').addEventListener('submit', function(event) {
     event.preventDefault();
     
     let formData = new FormData(this);
     
     fetch("{{ route('cart.add') }}", {
         method: "POST",
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
         body: formData
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            updateCartQuantity(); // تحديث عدد المنتجات في السلة
+            // التحديث الفوري للعداد قبل جلب البيانات
+            const badges = document.querySelectorAll('.cart-quantity');
+            if (badges.length > 0) {
+                const current = parseInt(badges[0].textContent) || 0;
+                badges.forEach(b => b.textContent = current + parseInt(formData.get('quantity') || 1));
+            }
+            
+            // ثم جلب العدد الحقيقي من السيرفر
+            updateCartQuantity();
+            
             Swal.fire({
                 icon: 'success',
                 title: 'Added to Cart',
@@ -3182,31 +3199,114 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 showConfirmButton: false
             });
         } else {
-            // الكمية المطلوبة أكثر من المتوفرة
             Swal.fire({
                 icon: 'error',
-                title: 'Quantity Exceeded',
-                text: data.message
+                title: 'Error',
+                text: data.message || 'Failed to add to cart'
             });
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Network error occurred.'
+        });
     });
 });
-
+function updateCartQuantity() {
+    fetch("{{ route('cart.count') }}", { // تغيير المسار إلى route خاص بالعد فقط
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        const totalQuantity = data.total || 0;
+        document.querySelectorAll('.cart-quantity').forEach(badge => {
+            badge.textContent = totalQuantity;
+            badge.style.display = totalQuantity > 0 ? 'inline-block' : 'none';
+        });
+    })
+    .catch(error => {
+        console.error('Error updating cart quantity:', error);
+        // تحديث بديل في حالة الخطأ
+        const badges = document.querySelectorAll('.cart-quantity');
+        if (badges.length > 0) {
+            const current = parseInt(badges[0].textContent) || 0;
+            badges.forEach(b => b.textContent = current + 1);
+        }
+    });
+}
   
-  function updateCartQuantity() {
-      fetch("{{ route('cart.items') }}")
+document.querySelectorAll('.quantity-input').forEach(input => {
+  input.addEventListener('change', function() {
+      const cartId = this.dataset.cartId;
+      const newQuantity = this.value;
+      const maxQuantity = this.dataset.max;
+      const row = this.closest('tr');
+      const price = parseFloat(row.querySelector('td:nth-child(5)').textContent.replace('$', ''));
+
+      if (parseInt(newQuantity) > parseInt(maxQuantity)) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Quantity Exceeded',
+              text: `Only ${maxQuantity} items available in stock.`
+          });
+          this.value = maxQuantity;
+          return;
+      }
+
+      fetch("{{ route('cart.update') }}", {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          },
+          body: JSON.stringify({
+              cart_id: cartId,
+              quantity: newQuantity
+          })
+      })
       .then(response => response.json())
       .then(data => {
-          let totalQuantity = 0;
-          data.forEach(item => {
-              totalQuantity += item.quantity; // إجمالي الكمية في السلة
+          if (data.success) {
+              // تحديث السعر الإجمالي للعنصر
+              row.querySelector('.item-total').textContent = '$' + (price * newQuantity).toFixed(2);
+              
+              // تحديث الإجماليات
+              document.getElementById('subtotal').textContent = '$' + data.totals.subtotal.toFixed(2);
+              document.getElementById('shipping-cost').textContent = '$' + data.totals.shipping.toFixed(2);
+              document.getElementById('total').textContent = '$' + data.totals.total.toFixed(2);
+              
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Updated',
+                  text: 'Quantity updated successfully!',
+                  timer: 1200,
+                  showConfirmButton: false
+              });
+          }
+      })
+      .catch(error => {
+          Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'An error occurred while updating quantity.'
           });
-          document.querySelector('.cart-quantity').textContent = totalQuantity;
       });
-  }
-  </script>
-  
-</body>
+  });
+});
+
+
+
+</script>
 <style>
 
 .nav-tabs .nav-link {

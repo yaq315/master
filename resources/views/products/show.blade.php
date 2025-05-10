@@ -3,7 +3,7 @@
 @section('content')
 <!-- Breadcrumb Area Start -->
 <div class="breadcrumb-area">
-    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center" style="background-image: url({{asset('img/bg-img/63.jpg')}});">
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center" style="background-image: url({{asset('img/bg-img/67.jpg')}});">
         <h2 class="text-white">Product Details</h2>
     </div>
 
@@ -59,7 +59,7 @@
                     
                     <div class="price-section mb-4">
                         <span class="current-price fs-3 text-dark fw-bold">${{ number_format($product->price, 2) }}</span>
-                        <span class="product-size text-muted ms-2">Size: Medium</span>
+                        {{-- <span class="product-size text-muted ms-2">Size: Medium</span> --}}
                         @if($product->original_price)
                         <span class="original-price text-muted text-decoration-line-through ms-2">${{ number_format($product->original_price, 2) }}</span>
                         <span class="discount-badge bg-success text-white px-2 py-1 rounded ms-2 fs-6">
@@ -68,19 +68,19 @@
                         @endif
                     </div>
 
-                    <div class="product-description mb-4">
+                    {{-- <div class="product-description mb-4">
                         <p class="text-secondary">{{ $product->description }}</p>
-                    </div>
+                    </div> --}}
 
                     <!-- Care Information -->
-                    @if($product->care_instructions)
+                    {{-- @if($product->care_instructions)
                     <div class="care-info mb-4">
                         <h5 class="mb-3 fw-semibold">Care Instructions</h5>
                         <div class="care-content bg-light p-3 rounded-3">
-                            {!! nl2br(e($product->care_instructions)) !!}
+                            {!! $product->care_instructions !!}
                         </div>
                     </div>
-                    @endif
+                    @endif --}}
 
                     <!-- Add to Cart Form -->
                    @auth
@@ -97,7 +97,11 @@
             <div class="col-md-6">
                 <label for="quantity" class="form-label fw-medium">Quantity</label>
                 <input type="number" name="quantity" id="quantity" 
-                       class="form-control py-2 text-center" value="1" min="1" max="10">
+                       class="form-control py-2 text-center" 
+                       value="1" 
+                       min="1" 
+                       max="{{ $product->stock }}" 
+                       oninput="validateQuantity(this)">
             </div>
         </div>
 
@@ -390,37 +394,248 @@
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize product gallery functionality
+    initProductGallery();
+    
+    // Initialize review functionality
+    initReviewSystem();
+    
+    // Initialize cart functionality
+    initCartSystem();
+    
+    // Initialize tabs
+    initBootstrapTabs();
+});
+
+/**
+ * Product Gallery Functionality
+ */
+function initProductGallery() {
+    const mainImage = document.getElementById('mainProductImage');
+    const thumbnails = document.querySelectorAll('.thumbnail-item img');
+    
+    if (mainImage && thumbnails.length) {
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                // Update main image
+                mainImage.src = this.src;
+                
+                // Update active thumbnail
+                document.querySelectorAll('.thumbnail-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                this.closest('.thumbnail-item').classList.add('active');
+            });
+        });
+    }
+}
+
+/**
+ * Review System Functionality
+ */
+function initReviewSystem() {
     const reviewForm = document.getElementById('reviewForm');
     
     if (reviewForm) {
         reviewForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            fetch(this.action, {
-                method: this.method,
-                body: new FormData(this),
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Thank you for your review!');
-                    location.reload(); 
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+            // Check if user is authenticated
+            const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+            
+            if (!isAuthenticated) {
+                window.location.href = "{{ route('login') }}";
+                return;
+            }
+            
+            submitReview(this);
         });
     }
+}
+
+function submitReview(form) {
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: new FormData(form)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert('success', 'Review submitted successfully!');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showAlert('error', data.message || 'An error occurred while saving.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('error', 'Network error occurred.');
+    });
+}
+
+/**
+ * Cart System Functionality
+ */
+function initCartSystem() {
+    const addToCartForm = document.querySelector('.add-to-cart-form');
+    
+    if (addToCartForm) {
+        addToCartForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Check if user is authenticated
+            const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+            
+            if (!isAuthenticated) {
+                window.location.href = "{{ route('login') }}";
+                return;
+            }
+            
+            addToCart(this);
+        });
+    }
+    
+    // Quantity input changes
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', function() {
+            updateCartItem(this);
+        });
+    });
+}
+document.querySelector('.add-to-cart-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const quantityInput = document.getElementById('quantity');
+    const maxQuantity = parseInt(quantityInput.max);
+    const requestedQuantity = parseInt(quantityInput.value);
+    
+    // التحقق من الكمية
+    if (requestedQuantity < 1) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Quantity',
+            text: 'Please enter a quantity of at least 1.',
+            confirmButtonColor: '#3085d6',
+        });
+        return;
+    }
+    
+    if (requestedQuantity > maxQuantity) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Not Enough Stock',
+            html: `Sorry, we only have <strong>${maxQuantity}</strong> items available.<br>Please adjust your quantity.`,
+            confirmButtonColor: '#3085d6',
+        });
+        return;
+    }
+    
+    // إذا كانت الكمية مقبولة، تابع عملية الإرسال
+    this.submit();
 });
 
+// دوال الزيادة والنقصان
+function incrementQuantity() {
+    const quantityInput = document.getElementById('quantity');
+    const currentValue = parseInt(quantityInput.value) || 1;
+    const maxValue = parseInt(quantityInput.max);
+    
+    if (currentValue < maxValue) {
+        quantityInput.value = currentValue + 1;
+    } else {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Maximum Reached',
+            text: `Maximum available quantity is ${maxValue}`,
+            timer: 1500,
+            showConfirmButton: false
+        });
+    }
+}
 
-document.addEventListener('DOMContentLoaded', function() {
-    // تفعيل تبويبات Bootstrap
+function decrementQuantity() {
+    const quantityInput = document.getElementById('quantity');
+    const currentValue = parseInt(quantityInput.value) || 1;
+    
+    if (currentValue > 1) {
+        quantityInput.value = currentValue - 1;
+    } else {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Minimum Reached',
+            text: 'Minimum quantity is 1',
+            timer: 1500,
+            showConfirmButton: false
+        });
+    }
+}
+function updateCartQuantity() {
+    fetch("{{ route('cart.items') }}")
+    .then(response => response.json())
+    .then(data => {
+        let totalQuantity = 0;
+        data.forEach(item => {
+            totalQuantity += item.quantity;
+        });
+        const cartBadge = document.querySelector('.cart-quantity');
+        if (cartBadge) {
+            cartBadge.textContent = totalQuantity;
+        }
+    });
+}
+
+function updateCartItem(input) {
+    const cartId = input.dataset.cartId;
+    const newQuantity = input.value;
+    const maxQuantity = input.dataset.max;
+    const row = input.closest('tr');
+    const price = parseFloat(row.querySelector('td:nth-child(5)').textContent.replace('$', ''));
+
+    if (parseInt(newQuantity) > parseInt(maxQuantity)) {
+        showAlert('error', `Only ${maxQuantity} items available in stock.`);
+        input.value = maxQuantity;
+        return;
+    }
+
+    fetch("{{ route('cart.update') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            cart_id: cartId,
+            quantity: newQuantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update item total
+            row.querySelector('.item-total').textContent = '$' + (price * newQuantity).toFixed(2);
+            
+            // Update totals
+            document.getElementById('subtotal').textContent = '$' + data.totals.subtotal.toFixed(2);
+            document.getElementById('shipping-cost').textContent = '$' + data.totals.shipping.toFixed(2);
+            document.getElementById('total').textContent = '$' + data.totals.total.toFixed(2);
+            
+            showAlert('success', 'Quantity updated successfully!', 1200);
+        }
+    })
+    .catch(error => {
+        showAlert('error', 'An error occurred while updating quantity.');
+    });
+}
+
+/**
+ * Bootstrap Tabs Initialization
+ */
+function initBootstrapTabs() {
     const tabElms = document.querySelectorAll('button[data-bs-toggle="tab"]');
     tabElms.forEach(tabElm => {
         tabElm.addEventListener('click', function(event) {
@@ -428,125 +643,47 @@ document.addEventListener('DOMContentLoaded', function() {
             tabTrigger.show();
         });
     });
+}
 
-    // معالجة إرسال نموذج التقييم
-    const reviewForm = document.getElementById('reviewForm');
-    if (reviewForm) {
-        reviewForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            fetch(this.action, {
-                method: this.method,
-                body: new FormData(this),
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload(); 
-                } else {
-                    alert('Error submitting review');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    }
-});
-// أضف هذا الكود JavaScript بعد الفورم
-document.getElementById('reviewForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+/**
+ * Helper function to show alerts
+ */
+function showAlert(type, message, timer = null) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: timer || 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
     
-    fetch(this.action, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: new FormData(this)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Review submitted successfully!');
-            location.reload();
-        } else {
-            alert(data.message || 'An error occurred while saving.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Network error occurred.');
-    });
-});
-
-
-
-document.getElementById('reviewForm').addEventListener('submit', function(e) {
-        const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
-
-        if (!isAuthenticated) {
-            e.preventDefault();
-            window.location.href = "{{ route('login') }}";
-        }
-    });
-
-
-    document.querySelector('.add-to-cart-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form from reloading the page
-
-    let formData = new FormData(this);
-
-    fetch("{{ route('cart.add') }}", {
-        method: "POST",
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            updateCartQuantity(); // Update the cart item count
-            alert("Product successfully added to cart!"); // You can replace this with a custom notification
-        }
-    });
-});
-
-function updateCartQuantity() {
-    fetch("{{ route('cart.items') }}")
-    .then(response => response.json())
-    .then(data => {
-        let totalQuantity = 0;
-        data.forEach(item => {
-            totalQuantity += item.quantity; // إجمالي الكمية في السلة
-        });
-        document.querySelector('.cart-quantity').textContent = totalQuantity;
+    Toast.fire({
+        icon: type,
+        title: message
     });
 }
 
-
-document.getElementById('size').addEventListener('change', function() {
-    let size = this.value;
-    let basePrice = parseFloat(document.getElementById('product-price').dataset.base);
-    let finalPrice = basePrice;
-
-    // تعديل السعر بناء على الحجم
-    if (size === 'medium') {
-        finalPrice += 2;
-    } else if (size === 'large') {
-        finalPrice += 4;
+function validateQuantity(input) {
+    const maxQuantity = parseInt(input.max);
+    const enteredValue = parseInt(input.value);
+    
+    if (enteredValue < 1) {
+        input.value = 1;
+    } else if (enteredValue > maxQuantity) {
+        input.value = maxQuantity;
+        Swal.fire({
+            icon: 'warning',
+            title: 'Maximum Quantity Reached',
+            text: `Only ${maxQuantity} items available in stock.`,
+            timer: 2000,
+            showConfirmButton: false
+        });
     }
-
-    document.getElementById('product-price').textContent = `$${finalPrice.toFixed(2)}`;
-});
-
-
+}
 
 </script>
 

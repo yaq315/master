@@ -21,7 +21,8 @@
             <ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="{{ route('about') }}">About</a></li>
-                <li><a href="#">Pages</a>
+                {{-- <li>
+                    <a href="#">Pages</a>
                     <ul class="dropdown">
                         <li><a href="{{ route('home') }}">Home</a></li>
                         <li>
@@ -30,10 +31,10 @@
                         </li>
                         <li><a href="{{route('shop')}}">Shop</a>
                             <ul class="dropdown">
-                                <li><a href="{{route('shop')}}">Shop</a></li>
+                                <li><a href="{{route('shop')}}">Shop</a></li> --}}
                                 {{-- <a href="{{ route('shop-details', ['product' => $product->slug]) }}">Shop Details</a> --}}
 
-                                <li><a href="{{route('cart.view')}}">Cart</a></li>
+                                {{-- <li><a href="{{route('cart.view')}}">Cart</a></li>
                                 <li><a href="{{route('checkout')}}">Checkout</a></li>
                             </ul>
                         </li>
@@ -45,15 +46,16 @@
                         </li>
                         <li><a href="{{route('contact')}}">Contact</a></li>
                     </ul>
-                </li>
+                </li> --}}
+                
                 <li><a href="{{route('shop')}}">Shop</a></li>
                 <li><a href="{{route('contact')}}">Contact</a></li>
             </ul>
 
             <!-- Search Icon -->
-            <div id="searchIcon">
+            {{-- <div id="searchIcon">
                 <i class="fa fa-search" aria-hidden="true"></i>
-            </div>
+            </div> --}}
 
         </div>
         <!-- Navbar End -->

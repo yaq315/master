@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             'email' => 'superadmin@leafyland.com',
             'password' => Hash::make('password123'),
             'role' => 'super_admin',
-            'profile_photo_path' => null
+            'profile_photo_path' => 'profile-photos/img2.jpg'
         ]);
 
         // إنشاء أدمن
@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@leafyland.com',
             'password' => Hash::make('password123'),
             'role' => 'admin',
-            'profile_photo_path' => null
+            'profile_photo_path' => 'profile-photos/img1.jpg',
         ]);
 
         // إنشاء مستخدم عادي

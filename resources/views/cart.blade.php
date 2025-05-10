@@ -19,13 +19,13 @@
     <!-- ##### Breadcrumb Area Start ##### -->
     <div class="breadcrumb-area">
         <!-- Top Breadcrumb Area -->
-        <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center" style="background-image: url({{asset('img/bg-img/51.jpg')}});">
+        <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center" style="background-image: url({{asset('img/bg-img/69.jpg')}});">
             <h2>Cart</h2>
         </div>
 
         <div class="container">
-            <div class="row">
-                <div class="col-12">
+            <div class="row align-items-center">
+                <div class="col-md-8">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{route('home')}}"><i class="fa fa-home"></i> Home</a></li>
@@ -33,6 +33,7 @@
                         </ol>
                     </nav>
                 </div>
+              
             </div>
         </div>
     </div>
@@ -44,46 +45,52 @@
             @section('content')
             <div class="cart-area container my-5">
                 <h2 class="mb-4">🛒 Your Cart</h2>
-                <table class="table table-bordered table-hover text-center">
-                    <thead class="table-success">
-                        <tr>
-                            <th>Image</th>
-                            <th>Product</th>
-                            <th>Size</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($cartItems as $item)
-                            <tr data-id="{{ $item->id }}">
-                                <td>
-                                    <img src="{{ asset('storage/' . $item->product->image) }}" alt="Product Image" width="60">
-                                </td>
-                                <td>
-                                    <a href="{{ route('shop-details', $item->product->slug) }}">
-                                        {{ $item->product->name }}
-                                    </a>
-                                </td>
-                                <td>{{ $item->size }}</td>
-                                <td>
-                                    <input type="number" min="1" value="{{ $item->quantity }}" 
-                                           class="form-control quantity-input" 
-                                           data-cart-id="{{ $item->id }}" 
-                                           data-max="{{ $item->product->stock }}">
-                                </td>
-                                
-                                <td>${{ number_format($item->product->price, 2) }}</td>
-                                <td class="item-total">${{ number_format($item->product->price * $item->quantity, 2) }}</td>
-                                <td>
-                                    <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $item->id }}">🗑️</button>
-                                </td>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover text-center">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Image</th>
+                                <th>Product</th>
+                                <th>Size</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>Action</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach($cartItems as $item)
+                                <tr data-id="{{ $item->id }}">
+                                    <td data-label="Image">
+                                        <img src="{{ asset('storage/' . $item->product->image) }}" alt="Product Image" class="img-fluid" width="60">
+                                    </td>
+                                    <td data-label="Product">
+                                        <a href="{{ route('shop-details', $item->product->slug) }}">
+                                            {{ $item->product->name }}
+                                        </a>
+                                    </td>
+                                    <td data-label="Size">{{ $item->size }}</td>
+                                    <td data-label="Quantity">
+                                        <div class="d-flex justify-content-center">
+                                            <input type="number" min="1" value="{{ $item->quantity }}" 
+                                                   class="form-control quantity-input" 
+                                                   data-cart-id="{{ $item->id }}" 
+                                                   data-max="{{ $item->product->stock }}"
+                                                   style="max-width: 80px;">
+                                        </div>
+                                    </td>
+                                    <td data-label="Price">${{ number_format($item->product->price, 2) }}</td>
+                                    <td data-label="Total" class="item-total">${{ number_format($item->product->price * $item->quantity, 2) }}</td>
+                                    <td data-label="Action">
+                                        <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $item->id }}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         
 

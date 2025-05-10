@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use App\Models\Product;
 use App\Models\User;
+  use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use App\Models\Order;
 
 class DashboardController extends Controller
 {
@@ -15,20 +18,40 @@ class DashboardController extends Controller
         $this->middleware('admin');
     }
 
-    public function index()
+  public function index()
     {
-        // Get all dashboard statistics
+        // Basic Stats
         $contactsCount = Contact::count();
         $unreadContactsCount = Contact::whereNull('read_at')->count();
         $usersCount = User::count();
         $productsCount = Product::count();
-        
-        // Get recent data
+
+        // Recent Entries
         $recentContacts = Contact::latest()->take(5)->get();
         $users = User::where('role', '!=', 'super_admin')
-                   ->orderBy('created_at', 'desc')
-                   ->take(5)
-                   ->get();
+                     ->orderBy('created_at', 'desc')
+                     ->take(5)
+                     ->get();
+
+        // Sales Chart Data
+        $salesData = Order::select(
+                DB::raw('SUM(total) as total'),
+                DB::raw('MONTH(created_at) as month')
+            )
+            ->whereYear('created_at', now()->year)
+            ->where('status', '!=', 'cancelled')
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy(DB::raw('MONTH(created_at)'))
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $chartLabels = [];
+        $chartValues = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $chartLabels[] = Carbon::create()->month($i)->format('M');
+            $chartValues[] = $salesData[$i] ?? 0;
+        }
 
         return view('admin.dashboard', compact(
             'contactsCount',
@@ -36,7 +59,38 @@ class DashboardController extends Controller
             'usersCount',
             'productsCount',
             'recentContacts',
-            'users'  
+            'users',
+            'chartLabels',
+            'chartValues'
         ));
     }
+  
+// public function dashboard()
+// {
+//     $salesData = Order::select(
+//             DB::raw('SUM(total) as total'),
+//             DB::raw('MONTH(created_at) as month')
+//         )
+//         ->whereYear('created_at', now()->year)
+//         ->where('status', '!=', 'cancelled')
+//         ->groupBy(DB::raw('MONTH(created_at)'))
+//         ->orderBy(DB::raw('MONTH(created_at)'))
+//         ->pluck('total', 'month')
+//         ->toArray();
+
+//     $chartLabels = [];
+//     $chartValues = [];
+
+//     for ($i = 1; $i <= 12; $i++) {
+//         $chartLabels[] = Carbon::create()->month($i)->format('M');
+//         $chartValues[] = $salesData[$i] ?? 0;
+//     }
+
+//     return view('admin.users.dashboard', [
+//         'chartLabels' => json_encode($chartLabels),
+//         'chartValues' => json_encode($chartValues),
+//     ]);
+// }
+
+
 }

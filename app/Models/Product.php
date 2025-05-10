@@ -10,11 +10,19 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name', 'slug', 'description', 'price', 'original_price',
-        'image', 'images', 'is_featured', 'is_hot', 'is_on_sale',
-        'stock', 'category_id'
-    ];
+ protected $fillable = [
+    'name',
+    'description',
+    'price',
+    'original_price',
+    'stock',
+    'category_id',
+    'image',
+    'is_active',
+    'is_featured',
+    'care_instructions',
+    'usage'
+];
 
     protected $casts = [
         'images' => 'array',
@@ -85,5 +93,14 @@ class Product extends Model
 public function cartItems()
 {
     return $this->hasMany(CartItem::class);
+}
+
+protected static function boot()
+{
+    parent::boot();
+
+    static::creating(function ($product) {
+        $product->slug = \Illuminate\Support\Str::slug($product->name);
+    });
 }
 }
