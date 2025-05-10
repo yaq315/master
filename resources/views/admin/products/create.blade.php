@@ -32,7 +32,8 @@
                     </div>
                 </div>
                 <div class="card-body px-4 pt-4 pb-2">
-                    <form action="{{ route('admin.products.store') }}" method="POST">
+                <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
+
                         @csrf
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -90,28 +91,16 @@
                                     <label class="form-check-label" for="is_featured">Featured</label>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="image" class="form-label">Select Product Image</label>
-                                @if(count($files) > 0)
-                                    <select name="image" class="form-select" required id="image-selector">
-                                        @foreach($files as $file)
-                                            <option value="{{ $file }}">
-                                                {{ $file }}
-                                                <!-- The image will be previewed here -->
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    
-                                    <!-- Preview of the selected image -->
-                                    <div class="mt-3" id="image-preview">
-                                        <img src="" alt="Preview" style="max-height: 150px; display: none;" id="preview-image">
-                                    </div>
-                                @else
-                                    <div class="alert alert-warning">
-                                        No images found in the external folder.
-                                    </div>
-                                @endif
-                            </div>
+        <label for="image" class="form-label">Product Image</label>
+        <input type="file" class="form-control @error('image') is-invalid @enderror" 
+               id="image" name="image" required accept="image/*">
+        
+        @error('image')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+        
+        <small class="text-muted">Allowed types: jpeg, png, jpg, gif (Max: 2MB)</small>
+    </div>
                             
                             
                         </div>
@@ -144,6 +133,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selector.options.length > 0) {
             selector.dispatchEvent(new Event('change'));
         }
+    }
+});
+
+document.getElementById('image').addEventListener('change', function(e) {
+    if (e.target.files.length > 0) {
+        const src = URL.createObjectURL(e.target.files[0]);
+        const preview = document.getElementById('image-preview');
+        preview.src = src;
+        preview.style.display = "block";
     }
 });
 </script>

@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
@@ -17,92 +19,66 @@ class ProductController extends Controller
         $categories = Category::all();
         return view('admin.products.index', compact('products', 'categories'));
     }
+public function create()
+{
+    $categories = Category::all();
+    return view('admin.products.create', compact('categories'));
+}
 
-    public function create()
-    {
-        $categories = Category::all();
-        
-        // Path to your external images directory
-        $externalImagePath = 'C:\Users\Orange\Desktop\image\products'; // Update this path
-        
-        // Get all image files from the external directory
-        $files = [];
-        if (File::exists($externalImagePath)) {
-            $files = collect(File::files($externalImagePath))
-                ->filter(function ($file) {
-                    return in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'png', 'gif']);
-                })
-                ->map(function ($file) {
-                    return $file->getFilename();
-                })
-                ->toArray();
-        }
-        
-        return view('admin.products.create', compact('categories', 'files'));
-    }
 public function store(Request $request)
 {
-    // 1. Validate incoming request data
-    $validated = $request->validate([
+    // 1. Validate the input data
+    $validatedData = $request->validate([
         'name' => 'required|string|max:255',
         'description' => 'required|string',
         'price' => 'required|numeric|min:0',
+        'original_price' => 'nullable|numeric|min:0',
         'category_slug' => 'required|exists:categories,slug',
-        'image' => 'nullable|string',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
         'stock' => 'required|integer|min:0',
+        'is_active' => 'sometimes|boolean',
+        'is_featured' => 'sometimes|boolean',
+        'care_instructions' => 'nullable|string',
+        'usage' => 'nullable|string',
     ]);
 
-    // 2. Log incoming data for debugging
-    \Log::debug('Received Data:', $request->all());
-
     try {
-        // 3. Check if image exists in external directory
-        $externalImagePath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, 'C:/Users/Orange/Desktop/image/products/' . $validated['image']);
-        if (!file_exists($externalImagePath)) {
-            \Log::error('Image not found: ' . $externalImagePath);
-            return back()->with('error', 'Image not found in the specified path')->withInput();
+        // 2. Handle image upload
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = Str::slug($validatedData['name']) . '-' . time() . '.' . $image->extension();
+            $imagePath = $image->storeAs('products', $imageName, 'public');
         }
 
-        // 4. Copy the image to storage
-        $storagePath = 'products/' . $validated['image'];
-        $copyResult = Storage::disk('public')->put($storagePath, file_get_contents($externalImagePath));
+        // 3. Get category_id from slug
+        $category = Category::where('slug', $validatedData['category_slug'])->firstOrFail();
 
-        if (!$copyResult) {
-            \Log::error('Failed to copy image to storage');
-            return back()->with('error', 'Failed to save the image')->withInput();
-        }
+        // 4. Create the product
+        $product = Product::create([
+            'name' => $validatedData['name'],
+            'description' => $validatedData['description'],
+            'price' => $validatedData['price'],
+            'original_price' => $validatedData['original_price'] ?? null,
+            'stock' => $validatedData['stock'],
+            'category_id' => $category->id,
+            'image' => $imagePath,
+            'is_active' => $request->boolean('is_active'),
+            'is_featured' => $request->boolean('is_featured'),
+            'care_instructions' => $validatedData['care_instructions'] ?? null,
+            'usage' => $validatedData['usage'] ?? null,
+        ]);
 
-        // 5. Prepare product data
-        $productData = [
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'price' => $validated['price'],
-            'original_price' => $request->input('original_price', null),
-            'stock' => $validated['stock'],
-            'category_id' => Category::where('slug', $validated['category_slug'])->first()->id,
-            'image' => $request->image ? $storagePath : null,
-            'is_active' => $request->has('is_active') ? 1 : 0,
-            'is_featured' => $request->has('is_featured') ? 1 : 0,
-            'care_instructions' => $request->input('care_instructions', ''),
-            'usage' => $request->input('usage', ''),
-        ];
-
-        \Log::debug('Attempting to create product with:', $productData);
-
-        // 6. Create the product
-        $product = Product::create($productData);
-
-        \Log::info('Product created successfully', ['id' => $product->id]);
-
+        // 5. Redirect with success message
         return redirect()->route('admin.products.index')
                ->with('success', 'Product added successfully!');
 
     } catch (\Exception $e) {
-        \Log::error('Product creation failed: ' . $e->getMessage(), [
-            'exception' => $e,
-            'trace' => $e->getTraceAsString()
-        ]);
-        return back()->with('error', 'An error occurred: ' . $e->getMessage())->withInput();
+        // 6. Handle exceptions
+        \Log::error('Error creating product: ' . $e->getMessage());
+
+        return back()->withInput()
+               ->with('error', 'An error occurred while adding the product: ' . $e->getMessage());
     }
 }
 
@@ -118,45 +94,67 @@ public function store(Request $request)
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'care_instructions' => 'nullable|string',
-            'usage' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'original_price' => 'nullable|numeric|min:0',
-            'stock' => 'required|integer|min:0',
             'category_slug' => 'required|exists:categories,slug',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'stock' => 'required|integer|min:0',
+            'original_price' => 'nullable|numeric|min:0',
             'is_active' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
+            'care_instructions' => 'nullable|string',
+            'usage' => 'nullable|string',
         ]);
 
-        $updateData = [
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'care_instructions' => $validated['care_instructions'],
-            'usage' => $validated['usage'],
-            'price' => $validated['price'],
-            'original_price' => $validated['original_price'],
-            'stock' => $validated['stock'],
-            'category_id' => Category::where('slug', $validated['category_slug'])->value('id'),
-            'is_active' => $request->has('is_active'),
-            'is_featured' => $request->has('is_featured'),
-        ];
+        try {
+            $updateData = [
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'price' => $validated['price'],
+                'original_price' => $validated['original_price'],
+                'stock' => $validated['stock'],
+                'category_id' => Category::where('slug', $validated['category_slug'])->value('id'),
+                'is_active' => $request->boolean('is_active'),
+                'is_featured' => $request->boolean('is_featured'),
+                'care_instructions' => $validated['care_instructions'],
+                'usage' => $validated['usage'],
+            ];
 
-        if ($request->hasFile('image')) {
-            Storage::disk('public')->delete($product->image);
-            $imagePath = $request->file('image')->store('products', 'public');
-            $updateData['image'] = $imagePath;
+            // Handle image update
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($product->image) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                
+                // Store new image
+                $updateData['image'] = $request->file('image')->store('products', 'public');
+            }
+
+            $product->update($updateData);
+
+            return redirect()->route('admin.products.index')
+                   ->with('success', 'Product updated successfully!');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred: ' . $e->getMessage())->withInput();
         }
-
-        $product->update($updateData);
-
-        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }
 
     public function destroy(Product $product)
     {
-        Storage::disk('public')->delete($product->image);
-        $product->delete();
-        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
+        try {
+            // Delete product image if exists
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            
+            $product->delete();
+            
+            return redirect()->route('admin.products.index')
+                   ->with('success', 'Product deleted successfully!');
+                   
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
 }

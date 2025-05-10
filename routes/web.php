@@ -138,14 +138,15 @@ Route::get('/test-session', function() {
 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('products', [AdminProductController::class, 'index'])->name('products.index');
         Route::get('/orders', [\App\Http\Controllers\Admin\OrderManagementController::class, 'index'])->name('orders.index');
     Route::patch('/orders/{order}/status', [\App\Http\Controllers\Admin\OrderManagementController::class, 'updateStatus'])->name('orders.updateStatus');
-
+    
+    // مسارات المنتجات - متاحة لكل الأدمن
+    Route::resource('products', AdminProductController::class);
     // إذا بدك عمليات CRUD كاملة للسوبر أدمن فقط:
-    Route::middleware('superadmin')->group(function () {
-        Route::resource('products', AdminProductController::class)->except(['index']);
-    });
+    // Route::middleware('superadmin')->group(function () {
+    //     Route::resource('products', AdminProductController::class)->except(['index']);
+    // });
 });
 
 
