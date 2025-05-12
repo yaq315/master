@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card leafy-card">
                 <div class="card-header bg-leafy text-white">
-                    <h4 class="mb-0">تعديل الملف الشخصي</h4>
+                    <h4 class="mb-0">Edit Profile</h4>
                 </div>
 
                 <div class="card-body">
@@ -15,14 +15,14 @@
                         @method('PUT')
 
                         <div class="mb-3 text-center">
-                            <label class="form-label">صورة الملف الشخصي</label>
+                            <label class="form-label">Profile Photo</label>
                             <div class="d-flex flex-column align-items-center">
                                 @if($user->profile_photo_path)
                                     <img src="{{ asset('storage/' . $user->profile_photo_path) }}" 
                                          class="rounded-circle mb-3" 
                                          width="150" 
                                          id="profile-photo-preview"
-                                         alt="صورة الملف الشخصي">
+                                         alt="Profile Photo">
                                 @else
                                     <div class="avatar bg-leafy rounded-circle mb-3" 
                                          id="profile-photo-preview"
@@ -35,21 +35,21 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">الاسم الكامل</label>
+                            <label class="form-label">Full Name</label>
                             <input type="text" class="form-control" name="name" value="{{ old('name', $user->name) }}" required>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">البريد الإلكتروني</label>
+                            <label class="form-label">Email Address</label>
                             <input type="email" class="form-control" name="email" value="{{ old('email', $user->email) }}" required>
                         </div>
 
                         <div class="d-flex justify-content-between mt-4">
                             <a href="{{ route('user.profile') }}" class="btn btn-outline-leafy">
-                                <i class="fas fa-arrow-left"></i> رجوع
+                                <i class="fas fa-arrow-left"></i> Back
                             </a>
                             <button type="submit" class="btn btn-leafy">
-                                <i class="fas fa-save"></i> حفظ التغييرات
+                                <i class="fas fa-save"></i> Save Changes
                             </button>
                         </div>
                     </form>

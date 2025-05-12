@@ -15,24 +15,23 @@ class OrderController extends Controller
     /**
      * Show the checkout page
      */
-    public function checkout()
-    {
-        $user = Auth::user();
-        $cartItems = $user->cartItems()->with('product')->get();
+   public function checkout()
+{
+    $user = Auth::user();
+    $cartItems = $user->cartItems()->with('product')->get();
     
-        if ($cartItems->isEmpty()) {
-            return redirect()->route('cart')->with('error', 'Your shopping cart is empty!');
-        }
-    
-        // Calculate totals, considering any applied coupon
-        $couponCode = session('applied_coupon');
-        $totals = $this->calculateOrderTotals($cartItems, $couponCode);
-    
-        return view('checkout', array_merge(compact('cartItems'), $totals, [
-            'discount' => $totals['discount'],
-            'applied_coupon' => $couponCode ? Coupon::where('code', $couponCode)->first() : null
-        ]));
+    if ($cartItems->isEmpty()) {
+        return redirect()->route('cart.items')->with('error', 'Your shopping cart is empty!');
     }
+    
+    $couponCode = session('applied_coupon');
+    $totals = $this->calculateOrderTotals($cartItems, $couponCode);
+    
+    return view('checkout', array_merge(compact('cartItems'), $totals,[
+        'discount' => $totals['discount'],
+        'applied_coupon' => $couponCode ? Coupon::where('code', $couponCode)->first() : null
+    ]));
+}
     
     public function placeOrder(Request $request)
     {
@@ -49,7 +48,7 @@ class OrderController extends Controller
         if ($cartItems->isEmpty()) {
             return $request->wantsJson() 
                 ? response()->json(['success' => false, 'message' => 'Your shopping cart is empty!'])
-                : redirect()->route('cart')->with('error', 'Your shopping cart is empty!');
+                : redirect()->route('cart.items')->with('error', 'Your shopping cart is empty!');
         }
     
         try {

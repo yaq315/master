@@ -91,9 +91,11 @@
                                 <textarea class="form-control" id="notes" name="notes" rows="2"></textarea>
                             </div>
                             
-                            <button type="submit" class="btn btn-success btn-block py-2">
-                                Confirm Order
-                            </button>
+               <!-- عدل زر التأكيد ليكون -->
+<button type="submit" class="btn btn-success btn-block py-2" id="confirm-order-btn">
+    Confirm Order
+</button>
+
                         </form>
                     </div>
                 </div>
@@ -107,7 +109,7 @@
                     </div>
                     <div class="card-body">
                         <div class="order-items mb-3">
-                            @foreach($cartItems as $item)
+                           @foreach($cartItems as $item)
                             <div class="d-flex justify-content-between mb-2">
                                 <span>{{ $item->product->name }} × {{ $item->quantity }}</span>
                                 <span>{{ number_format($item->product->price * $item->quantity, 2) }} JOD</span>
@@ -153,13 +155,100 @@
     @include('layouts.bottom')
 
     <!-- JavaScript -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Apply Coupon
-        document.getElementById('apply-coupon-form').addEventListener('submit', function(e) {
+<!-- jQuery & SweetAlert2 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const checkoutForm = document.getElementById('checkout-form');
+
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(checkoutForm);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+            Swal.fire({
+                title: 'Confirm Your Order',
+                html: `
+                    <div class="text-left">
+                        <p><strong>Name:</strong> ${formData.get('name')}</p>
+                        <p><strong>Phone:</strong> ${formData.get('phone')}</p>
+                        <p><strong>Governorate:</strong> ${formData.get('city')}</p>
+                        <p><strong>Address:</strong> ${formData.get('address')}</p>
+                        <hr>
+                        <p><strong>Total:</strong> {{ number_format($total, 2) }} JOD</p>
+                    </div>
+                `,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Place Order',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#28a745'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Processing...',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    fetch(checkoutForm.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        Swal.close();
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Order Placed Successfully!',
+                                html: `
+                                    <div class="text-left">
+                                        <p>Order #: <strong>${data.order_number}</strong></p>
+                                        <p>Thank you for shopping with us!</p>
+                                    </div>
+                                `,
+                                icon: 'success',
+                                confirmButtonText: 'Download Invoice',
+                                cancelButtonText: 'Back to Home',
+                                showCancelButton: true
+                            }).then(result => {
+                                if (result.isConfirmed) {
+                                    window.location.href = `/orders/${data.order_id}/pdf`;
+                                } else {
+                                    window.location.href = '/';
+                                }
+                            });
+                        } else {
+                            Swal.fire('Error!', data.message || 'Failed to place order.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        Swal.fire('Error!', 'An error occurred while placing your order.', 'error');
+                    });
+                }
+            });
+        });
+    }
+
+    // Coupon Apply Handler (if coupon form exists)
+    const couponForm = document.getElementById('apply-coupon-form');
+    if (couponForm) {
+        couponForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(this);
-            
+
             fetch("{{ route('apply.coupon') }}", {
                 method: 'POST',
                 body: formData,
@@ -171,7 +260,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    location.reload(); // Reload to update totals
+                    location.reload();
                 } else {
                     document.getElementById('coupon-message').innerHTML = `
                         <div class="alert alert-danger">${data.message}</div>
@@ -179,99 +268,10 @@
                 }
             });
         });
-    });
+    }
+});
+</script>
 
-    document.addEventListener('DOMContentLoaded', function() {
-    const checkoutForm = document.getElementById('checkout-form');
-    
-    if (checkoutForm) {
-        checkoutForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // جمع بيانات الفورم
-            const formData = new FormData(checkoutForm);
-            
-            // عرض SweetAlert للتأكيد
-            Swal.fire({
-                title: 'Confirm Your Order',
-                html: `
-                    <div class="text-left">
-                        <p><strong>Name:</strong> ${formData.get('name')}</p>
-                        <p><strong>Phone:</strong> ${formData.get('phone')}</p>
-                        <p><strong>Governorate:</strong> ${formData.get('city')}</p>
-                        <p><strong>Address:</strong> ${formData.get('address')}</p>
-                        <p><strong>Payment Method:</strong> Cash on Delivery</p>
-                        <hr>
-                        <p><strong>Total Amount:</strong> {{ number_format($total, 2) }} JOD</p>
-                    </div>
-                `,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Confirm Order',
-                cancelButtonText: 'Review Order',
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#6c757d',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // إرسال الفورم عبر AJAX
-                    fetch(checkoutForm.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // عرض رسالة نجاح وتوجيه إلى صفحة النجاح
-                      // في جزء رسالة النجاح بعد تأكيد الطلب
-Swal.fire({
-    title: 'Order Placed Successfully!',
-    html: `
-        <div class="text-left">
-            <p>Order Number: <strong>${data.order_number}</strong></p>
-            <p>We have sent a confirmation to your email.</p>
-            <p>Thank you for shopping with LeafyLand!</p>
-        </div>
-    `,
-    icon: 'success',
-    confirmButtonText: 'Download Invoice',
-    confirmButtonColor: '#28a745',
-    showCancelButton: true,
-    cancelButtonText: 'Continue Shopping'
-}).then((result) => {
-    if (result.isConfirmed) {
-        // تحميل ملف PDF مباشرة
-        window.location.href = `/orders/${data.order_id}/pdf`;
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-        window.location.href = '/';
-    }
-});
-                        } else {
-                            // عرض رسالة خطأ
-                            Swal.fire({
-                                title: 'Error!',
-                                text: data.message || 'Failed to place order. Please try again.',
-                                icon: 'error'
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'An error occurred while processing your order.',
-                            icon: 'error'
-                        });
-                    });
-                }
-            });
-        });
-    }
-});
-    </script>
+
 </body>
 </html>

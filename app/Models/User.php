@@ -67,6 +67,38 @@ public function cartItems()
     return $this->hasMany(\App\Models\Cart::class);
 }
 
+public function orders()
+{
+    return $this->hasMany(Order::class);
+}
+
+// Order.php
+public function items()
+{
+    return $this->hasMany(OrderItem::class);
+}
+
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
+// OrderItem.php
+public function product()
+{
+    return $this->belongsTo(Product::class);
+}
+
+public function order()
+{
+    return $this->belongsTo(Order::class);
+}
+
+public function purchasedPlants()
+{
+    return $this->belongsToMany(Product::class, 'order_items', 'user_id', 'product_id')
+                ->withPivot('created_at');
+}
 
 
 }

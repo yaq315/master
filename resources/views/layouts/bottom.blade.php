@@ -114,7 +114,6 @@ document.querySelectorAll('.quantity-input').forEach(input => {
 });
 
 
-    </script>
    
    
    

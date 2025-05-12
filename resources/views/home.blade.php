@@ -19,7 +19,7 @@
                             <h2>Bring Nature to Your Home with LeafyLand</h2>
                             <p>Discover a wide range of ornamental plants and gardening tools to create your dream garden.</p>
                             <div class="welcome-btn-group">
-                                <a href="#" class="btn alazea-btn mr-30">SHOP NOW</a>
+                                <a href="{{route('shop')}}" class="btn alazea-btn mr-30">SHOP NOW</a>
                                
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                             <h2>Everything You Need for Your Garden</h2>
                             <p>From plants to tools, we provide everything to help you grow and maintain a beautiful garden.</p>
                             <div class="welcome-btn-group">
-                                <a href="#" class="btn alazea-btn mr-30">EXPLORE PRODUCTS</a>
+                                <a href="{{route('shop')}}" class="btn alazea-btn mr-30">EXPLORE PRODUCTS</a>
                                
                             </div>
                         </div>
@@ -185,13 +185,14 @@
                         </div>
 
                         <!-- Single Benefits Area -->
-                        <div class="col-12 col-sm-6">
-                            <div class="single-benefits-area">
-                                <img src="img/core-img/b2.png" alt="">
-                                <h5>Expert Advice</h5>
-                                <p>Our team is always ready to help you with gardening tips and advice.</p>
-                            </div>
-                        </div>
+                     <div class="col-12 col-sm-6">
+    <div class="single-benefits-area">
+        <img src="img/core-img/b2.png" alt="">
+        <h5>Best Care Methods</h5>
+        <p>We provide the best care and usage tips when purchasing your plants.</p>
+    </div>
+</div>
+
 
                         <!-- Single Benefits Area -->
                         <div class="col-12 col-sm-6">
@@ -286,120 +287,101 @@
 
 @section("contant5");
 
-<section class="new-arrivals-products-area bg-gray section-padding-100">
+<section class="new-arrivals-products-area bg-light section-padding-70">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <!-- Section Heading -->
-                <div class="section-heading text-center">
-                    <h2>NEW ARRIVALS</h2>
-                    <p>Check out our latest products</p>
+                <div class="section-heading text-center mb-5">
+                   <h2 class="section-heading">Categories</h2>
+                    <p class="text-muted">Browse our featured product categories</p>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-
-            <!-- Single Product Area -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="single-product-area mb-50 wow fadeInUp" data-wow-delay="100ms">
-                    <!-- Product Image -->
-                    <div class="product-img">
-                        <a href="shop-details.html"><img src="img/bg-img/9.jpg" alt=""></a>
-                        <!-- Product Tag -->
-                        <div class="product-tag">
-                            <a href="#">New</a>
-                        </div>
-                        <div class="product-meta d-flex">
-                            <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a>
-                            <a href="cart.html" class="add-to-cart-btn">Add to cart</a>
-                            <a href="#" class="compare-btn"><i class="arrow_left-right_alt"></i></a>
-                        </div>
-                    </div>
-                    <!-- Product Info -->
-                    <div class="product-info mt-15 text-center">
-                        <a href="shop-details.html">
-                            <p>Pothos Plant</p>
-                        </a>
-                        <h6>$15.99</h6>
-                    </div>
+<div class="row" id="categoriesContainer">
+    @foreach($categories->take(3) as $category)
+    <!-- Single Category Card -->
+    <div class="col-12 col-sm-6 col-lg-4 d-flex mb-4">
+        <div class="single-product-area border rounded shadow-sm p-3 bg-white w-100 d-flex flex-column">
+            <!-- Category Image -->
+            <div class="product-img position-relative">
+                <a href="{{ route('shop') }}?category={{ $category->slug }}">
+                    <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="img-fluid rounded">
+                </a>
+                @if($category->is_featured)
+                <div class="product-tag position-absolute top-0 start-0 bg-success text-white px-2 py-1 rounded-end">
+                    <small>Featured</small>
                 </div>
+                @endif
             </div>
 
-            <!-- Single Product Area -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="single-product-area mb-50 wow fadeInUp" data-wow-delay="200ms">
-                    <!-- Product Image -->
-                    <div class="product-img">
-                        <a href="shop-details.html"><img src="img/bg-img/10.jpg" alt=""></a>
-                        <div class="product-meta d-flex">
-                            <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a>
-                            <a href="cart.html" class="add-to-cart-btn">Add to cart</a>
-                            <a href="#" class="compare-btn"><i class="arrow_left-right_alt"></i></a>
-                        </div>
-                    </div>
-                    <!-- Product Info -->
-                    <div class="product-info mt-15 text-center">
-                        <a href="shop-details.html">
-                            <p>Snake Plant</p>
-                        </a>
-                        <h6>$20.99</h6>
-                    </div>
+            <!-- Category Info -->
+            <div class="product-info text-center mt-3 mt-auto">
+                <a href="{{ route('shop') }}?category={{ $category->slug }}" class="product-title d-block h5 text-dark mb-1">
+                    {{ $category->name }}
+                </a>
+                <div class="product-category text-muted mb-2">
+                    {{ $category->products_count }} products available
+                </div>
+                <div>
+                    <a href="{{ route('shop') }}?category={{ $category->slug }}" class="btn btn-success btn-sm">
+                        Shop Now <i class="fa fa-arrow-right ms-2"></i>
+                    </a>
                 </div>
             </div>
+        </div>
+    </div>
+    @endforeach
+</div>
+    </div>
+</section>
 
-            <!-- Single Product Area -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="single-product-area mb-50 wow fadeInUp" data-wow-delay="300ms">
-                    <!-- Product Image -->
-                    <div class="product-img">
-                        <a href="shop-details.html"><img src="img/bg-img/11.jpg" alt=""></a>
-                        <div class="product-meta d-flex">
-                            <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a>
-                            <a href="cart.html" class="add-to-cart-btn">Add to cart</a>
-                            <a href="#" class="compare-btn"><i class="arrow_left-right_alt"></i></a>
-                        </div>
-                    </div>
-                    <!-- Product Info -->
-                    <div class="product-info mt-15 text-center">
-                        <a href="shop-details.html">
-                            <p>Monstera Plant</p>
-                        </a>
-                        <h6>$25.99</h6>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Product Area -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="single-product-area mb-50 wow fadeInUp" data-wow-delay="400ms">
-                    <!-- Product Image -->
-                    <div class="product-img">
-                        <a href="shop-details.html"><img src="img/bg-img/12.jpg" alt=""></a>
-                        <!-- Product Tag -->
-                        <div class="product-tag sale-tag">
-                            <a href="#">Sale</a>
-                        </div>
-                        <div class="product-meta d-flex">
-                            <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a>
-                            <a href="cart.html" class="add-to-cart-btn">Add to cart</a>
-                            <a href="#" class="compare-btn"><i class="arrow_left-right_alt"></i></a>
-                        </div>
-                    </div>
-                    <!-- Product Info -->
-                    <div class="product-info mt-15 text-center">
-                        <a href="shop-details.html">
-                            <p>Fiddle Leaf Fig</p>
-                        </a>
-                        <h6>$30.99</h6>
-                    </div>
-                </div>
-            </div>
-
+<section class="new-arrivals-products-area section-padding-80 bg-light">
+    <div class="container">
+        <div class="row mb-4">
             <div class="col-12 text-center">
-                <a href="#" class="btn alazea-btn">View All</a>
+                <h2 class="section-heading">Featured Products</h2>
             </div>
+        </div>
 
+        <div class="row">
+            @foreach($products->take(3) as $product)
+            <div class="col-12 col-sm-6 col-lg-4 d-flex mb-4">
+                <div class="single-product-area border rounded shadow-sm p-3 bg-white w-100 d-flex flex-column">
+                    <!-- Product Image -->
+                    <div class="product-img position-relative">
+                        <a href="{{ route('shop-details', $product->slug) }}">
+                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded">
+                        </a>
+                        @if($product->is_featured)
+                        <div class="product-tag position-absolute top-0 start-0 bg-success text-white px-2 py-1 rounded-end">
+                            <small>Featured</small>
+                        </div>
+                        @endif
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="product-info text-center mt-3 mt-auto">
+                        <a href="{{ route('shop-details', $product->slug) }}" class="product-title d-block h5 text-dark mb-1">
+                            {{ $product->name }}
+                        </a>
+                        <div class="product-price text-success fw-bold mb-2">
+                            ${{ number_format($product->price, 2) }}
+                        </div>
+                        <a href="{{ route('shop-details', $product->slug) }}" class="btn btn-success btn-sm">
+                            View Details <i class="fa fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+        <div class="row">
+            <div class="col-12 text-center mt-3">
+                <a href="{{ route('shop') }}" class="btn alazea-btn">View All Products</a>
+            </div>
         </div>
     </div>
 </section>
@@ -411,40 +393,53 @@
         <div class="row align-items-center justify-content-between">
             <div class="col-12 col-lg-5">
                 <!-- Section Heading -->
-                <div class="section-heading">
-                    <h2>GET IN TOUCH</h2>
-                    <p>Send us a message, we will call back later</p>
+            <div class="section-heading">
+    <h2>GET IN TOUCH</h2>
+    <p>Send us a message, we will call back later</p>
+</div>
+
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+<!-- Contact Form Area -->
+<div class="contact-form-area mb-100">
+    <form action="{{ route('contact.store') }}" method="POST">
+ 
+
+        @csrf
+        <div class="row">
+            <div class="col-12 col-sm-6">
+                <div class="form-group">
+                    <input type="text" name="name" class="form-control" id="contact-name" placeholder="Your Name" required>
                 </div>
+            </div>
+            <div class="col-12 col-sm-6">
+                <div class="form-group">
+                    <input type="email" name="email" class="form-control" id="contact-email" placeholder="Your Email" required>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <input type="text" name="subject" class="form-control" id="contact-subject" placeholder="Subject" required>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <textarea class="form-control" name="message" id="message" cols="30" rows="10" placeholder="Message" required></textarea>
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn alazea-btn mt-15">Send Message</button>
+            </div>
+        </div>
+    </form>
+</div>
+
                 <!-- Contact Form Area -->
-                <div class="contact-form-area mb-100">
-                    <form action="#" method="post">
-                        <div class="row">
-                            <div class="col-12 col-sm-6">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="contact-name" placeholder="Your Name">
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6">
-                                <div class="form-group">
-                                    <input type="email" class="form-control" id="contact-email" placeholder="Your Email">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="contact-subject" placeholder="Subject">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <textarea class="form-control" name="message" id="message" cols="30" rows="10" placeholder="Message"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn alazea-btn mt-15">Send Message</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+              
             </div>
             <div class="col-12 col-lg-6">
                 <!-- Google Maps -->

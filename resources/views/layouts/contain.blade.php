@@ -2819,7 +2819,7 @@ img {
                         <div class="single-footer-widget">
                             <div class="footer-logo">
                                 <a href="#">
-                                    <img src="img/core-img/logo2.png" alt="LeafyLand Logo" style="height: 100px; width: 100px">
+                                    <img src="{{ asset('img/core-img/logo2.png') }}" alt="LeafyLand Logo" style="height: 100px; width: 100px">
                                 </a>
                             </div>
                             <p style="font-size: 14px; line-height: 1.6;">
@@ -2846,22 +2846,22 @@ img {
                             <nav class="widget-nav">
                                 <ul style="list-style: none; padding: 0;">
                                     <li style="margin-bottom: 8px;">
-                                        <a href="#" style="color: #fff; text-decoration: none; font-size: 14px; line-height: 2;">
+                                        <a href="{{ route('home') }}" style="color: #fff; text-decoration: none; font-size: 14px; line-height: 2;">
                                             <i class="fas fa-home" style="margin-right: 10px; width: 20px; text-align: center;"></i>Home
                                         </a>
                                     </li>
                                     <li style="margin-bottom: 8px;">
-                                        <a href="#" style="color: #fff; text-decoration: none; font-size: 14px; line-height: 2;">
+                                        <a href="{{ route('shop') }}" style="color: #fff; text-decoration: none; font-size: 14px; line-height: 2;">
                                             <i class="fas fa-shopping-bag" style="margin-right: 10px; width: 20px; text-align: center;"></i>Shop
                                         </a>
                                     </li>
                                     <li style="margin-bottom: 8px;">
-                                        <a href="#" style="color: #fff; text-decoration: none; font-size: 14px; line-height: 2;">
-                                            <i class="fas fa-blog" style="margin-right: 10px; width: 20px; text-align: center;"></i>Blog
+                                        <a href="{{ route('about') }}" style="color: #fff; text-decoration: none; font-size: 14px; line-height: 2;">
+                                            <i class="fas fa-blog" style="margin-right: 10px; width: 20px; text-align: center;"></i>About
                                         </a>
                                     </li>
                                     <li style="margin-bottom: 8px;">
-                                        <a href="#" style="color: #fff; text-decoration: none; font-size: 14px; line-height: 2;">
+                                        <a href="{{ route('contact') }}" style="color: #fff; text-decoration: none; font-size: 14px; line-height: 2;">
                                             <i class="fas fa-envelope" style="margin-right: 10px; width: 20px; text-align: center;"></i>Contact Us
                                         </a>
                                     </li>

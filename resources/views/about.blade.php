@@ -122,13 +122,13 @@
                             </div>
 
                             <!-- Single Benefits Area -->
-                            <div class="col-12 col-sm-6">
-                                <div class="single-benefits-area">
-                                    <img src="img/core-img/b2.png" alt="">
-                                    <h5>Expert Advice</h5>
-                                    <p>Our team is always ready to help you with gardening tips and advice.</p>
-                                </div>
-                            </div>
+                                        <div class="col-12 col-sm-6">
+    <div class="single-benefits-area">
+        <img src="img/core-img/b2.png" alt="">
+        <h5>Best Care Methods</h5>
+        <p>We provide the best care and usage tips when purchasing your plants.</p>
+    </div>
+</div>
 
                             <!-- Single Benefits Area -->
                             <div class="col-12 col-sm-6">
@@ -295,7 +295,7 @@
                             <img src="img/core-img/cf1.png" alt="">
                         </div>
                         <div class="cf-content">
-                            <h2><span class="counter">500</span>+</h2>
+                            <h2><span class="counter">15</span>+</h2>
                             <h6>PLANT SPECIES</h6>
                         </div>
                     </div>
@@ -308,7 +308,7 @@
                             <img src="img/core-img/cf2.png" alt="">
                         </div>
                         <div class="cf-content">
-                            <h2><span class="counter">10</span>K+</h2>
+                            <h2><span class="counter">10</span>+</h2>
                             <h6>HAPPY CUSTOMERS</h6>
                         </div>
                     </div>
@@ -321,7 +321,7 @@
                             <img src="img/core-img/cf3.png" alt="">
                         </div>
                         <div class="cf-content">
-                            <h2><span class="counter">100</span>+</h2>
+                            <h2><span class="counter">15</span>+</h2>
                             <h6>GARDENING TOOLS</h6>
                         </div>
                     </div>
@@ -334,7 +334,7 @@
                             <img src="img/core-img/cf4.png" alt="">
                         </div>
                         <div class="cf-content">
-                            <h2><span class="counter">50</span>K+</h2>
+                            <h2><span class="counter">50</span>+</h2>
                             <h6>PLANTS SOLD</h6>
                         </div>
                     </div>

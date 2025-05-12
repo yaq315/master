@@ -19,6 +19,8 @@ use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 
+use App\Http\Controllers\CategoryController;
+
 
 // صفحات ثابتة
 Route::get('/', fn() => view('home'))->name('home');
@@ -45,6 +47,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'editUserProfile'])->name('user.profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'updateUserProfile'])->name('user.profile.update');
 });
+
+Route::post('/change-password-ajax', [ProfileController::class, 'changePasswordAjax'])->name('password.change.ajax');
+
+Route::post('/password/change', [ProfileController::class, 'changePassword'])->name('password.update');
+
 
 // راوتات الأدمن
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
@@ -117,6 +124,8 @@ Route::get('/cart/count', function() {
     return response()->json(['total' => 0]);
 })->name('cart.count');
 
+Route::get('/cart/check', [CartController::class, 'check'])->name('cart.check');
+
 // الطلبات والكوبونات
 Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
@@ -155,5 +164,6 @@ Route::get('/test-images', function() {
     return scandir($path);
 });
 
+Route::get('/', [CategoryController::class, 'showHomePage'])->name('home');
 
 

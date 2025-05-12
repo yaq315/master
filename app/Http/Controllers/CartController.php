@@ -268,4 +268,14 @@ public function updateQuantity(Request $request)
     
     return view('cart', array_merge(compact('cartItems'), $totals));
 }
+
+public function check()
+{
+    $cartCount = auth()->user()->cartItems()->count();
+    
+    return response()->json([
+        'cart_count' => $cartCount,
+        'has_items' => $cartCount > 0
+    ]);
+}
 }

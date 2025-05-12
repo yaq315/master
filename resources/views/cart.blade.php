@@ -144,9 +144,10 @@
                         </div>
                         
                         <!-- Proceed to Checkout -->
-                        <a href="{{ route('checkout') }}" class="btn btn-success btn-block mt-4 py-2">
-                            Proceed to Checkout
-                        </a>
+     <button id="proceed-to-checkout" class="btn btn-success btn-block mt-4 py-2" 
+        onclick="proceedToCheckout()">
+    Proceed to Checkout
+</button>
                     </div>
                 </div>
             </div>
@@ -165,136 +166,126 @@
   
 </body>
 <!-- SweetAlert CDN -->
+<!-- SweetAlert CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Handle quantity update
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', function () {
+            const cartId = this.dataset.cartId;
+            const newQty = this.value;
+            const maxQty = this.dataset.max;
+            const row = this.closest('tr');
+            const price = parseFloat(row.querySelector('td:nth-child(5)').textContent.replace('$', ''));
 
-    
-document.querySelectorAll('.quantity-input').forEach(input => {
-    input.addEventListener('change', function() {
-        const cartId = this.dataset.cartId;
-        const newQuantity = this.value;
-        const maxQuantity = this.dataset.max;
-        const row = this.closest('tr');
-        const price = parseFloat(row.querySelector('td:nth-child(5)').textContent.replace('$', ''));
-
-        if (parseInt(newQuantity) > parseInt(maxQuantity)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Quantity Exceeded',
-                text: `Only ${maxQuantity} items available in stock.`
-            });
-            this.value = maxQuantity;
-            return;
-        }
-
-        fetch("{{ route('cart.update') }}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({
-                cart_id: cartId,
-                quantity: newQuantity
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // تحديث السعر الإجمالي للعنصر
-                row.querySelector('.item-total').textContent = '$' + (price * newQuantity).toFixed(2);
-                
-                // تحديث الإجماليات
-                document.getElementById('subtotal').textContent = '$' + data.totals.subtotal.toFixed(2);
-                document.getElementById('shipping-cost').textContent = '$' + data.totals.shipping.toFixed(2);
-                document.getElementById('total').textContent = '$' + data.totals.total.toFixed(2);
-                
+            if (parseInt(newQty) > parseInt(maxQty)) {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Updated',
-                    text: 'Quantity updated successfully!',
-                    timer: 1200,
-                    showConfirmButton: false
+                    icon: 'error',
+                    title: 'Quantity Exceeded',
+                    text: `Only ${maxQty} items available in stock.`
                 });
+                this.value = maxQty;
+                return;
             }
-        })
-        .catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while updating quantity.'
+
+            fetch("{{ route('cart.update') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    cart_id: cartId,
+                    quantity: newQty
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update item total
+                    row.querySelector('.item-total').textContent = '$' + (price * newQty).toFixed(2);
+
+                    // Update summary
+                    document.getElementById('subtotal').textContent = '$' + data.totals.subtotal.toFixed(2);
+                    document.getElementById('shipping-cost').textContent = '$' + data.totals.shipping.toFixed(2);
+                    document.getElementById('total').textContent = '$' + data.totals.total.toFixed(2);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated',
+                        text: 'Quantity updated successfully!',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+                }
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while updating quantity.'
+                });
             });
         });
     });
-});
 
+    // Handle delete item
     document.querySelectorAll('.delete-btn').forEach(button => {
-    button.addEventListener('click', function () {
-        const id = this.dataset.id;
-        
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You won\'t be able to revert this!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`/cart/delete/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your item has been deleted.',
-                            'success'
-                        ).then(() => {
-                            location.reload();
-                        });
-                    }
-                });
-            }
+        button.addEventListener('click', function () {
+            const id = this.dataset.id;
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, keep it'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    fetch(`/cart/delete/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Deleted!', 'Your item has been deleted.', 'success')
+                            .then(() => location.reload());
+                        }
+                    });
+                }
+            });
         });
     });
-});
 
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Apply Coupon in Cart Page
+    // Handle coupon apply
     const applyCouponBtn = document.getElementById('apply-coupon-btn');
     if (applyCouponBtn) {
         applyCouponBtn.addEventListener('click', applyCoupon);
     }
 
-    // Apply Coupon in Checkout Page
     const applyCouponForm = document.getElementById('apply-coupon-form');
     if (applyCouponForm) {
-        applyCouponForm.addEventListener('submit', function(e) {
+        applyCouponForm.addEventListener('submit', function (e) {
             e.preventDefault();
             applyCoupon();
         });
     }
 
     function applyCoupon() {
-        const couponCode = document.getElementById('coupon_code')?.value || 
-                          document.querySelector('#apply-coupon-form input[name="coupon_code"]')?.value;
-        
+        const couponInput = document.getElementById('coupon_code');
+        const couponCode = couponInput?.value.trim();
+        const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace(/[^0-9.-]+/g, ""));
+
         if (!couponCode) {
             showCouponMessage('Please enter a coupon code', 'error');
             return;
         }
-
-        const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace(/[^0-9.-]+/g,""));
-        const couponMessage = document.getElementById('coupon-message');
 
         fetch("{{ route('apply.coupon') }}", {
             method: 'POST',
@@ -313,8 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 updateOrderTotals(data.coupon.discount, data.coupon.code);
                 showCouponMessage(data.message, 'success');
-                
-                // If on cart page, redirect to checkout
+
                 if (window.location.pathname.includes('cart')) {
                     window.location.href = "{{ route('checkout') }}";
                 }
@@ -329,55 +319,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateOrderTotals(discount, couponCode) {
-        const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace(/[^0-9.-]+/g,""));
-        const shipping = parseFloat(document.getElementById('shipping-cost').textContent.replace(/[^0-9.-]+/g,""));
-        
-        // Update coupon row
-        const couponRow = document.getElementById('coupon-row');
-        if (couponRow) {
-            couponRow.style.display = 'flex';
-            document.getElementById('coupon-code-display').textContent = couponCode;
-            document.getElementById('coupon-value').textContent = `-${discount.toFixed(2)}`;
-        }
-        
-        // Update total
+        const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace(/[^0-9.-]+/g, ""));
+        const shipping = parseFloat(document.getElementById('shipping-cost').textContent.replace(/[^0-9.-]+/g, ""));
         const total = subtotal + shipping - discount;
-        document.getElementById('total').textContent = total.toFixed(2);
+
+        document.getElementById('coupon-row').style.display = 'flex';
+        document.getElementById('coupon-code-display').textContent = couponCode;
+        document.getElementById('coupon-value').textContent = '-$' + discount.toFixed(2);
+        document.getElementById('total').textContent = '$' + total.toFixed(2);
     }
 
     function showCouponMessage(message, type) {
-        const couponMessage = document.getElementById('coupon-message');
-        if (!couponMessage) return;
-        
-        couponMessage.innerHTML = `
-            <div class="alert alert-${type} alert-dismissible fade show">
-                ${message}
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-            </div>
-        `;
+        const messageDiv = document.getElementById('coupon-message');
+        messageDiv.textContent = message;
+        messageDiv.className = type === 'success' ? 'text-success small mt-2' : 'text-danger small mt-2';
     }
 });
-document.addEventListener('DOMContentLoaded', function() {
-    // Update shipping cost when country changes
-    document.getElementById('country').addEventListener('change', function() {
-        updateTotals();
-    });
+</script>
 
-    // Function to update all totals
-    function updateTotals() {
-        fetch("{{ route('cart.items') }}")
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('subtotal').textContent = '$' + data.totals.subtotal.toFixed(2);
-                document.getElementById('shipping-cost').textContent = '$' + data.totals.shipping.toFixed(2);
-                document.getElementById('total').textContent = '$' + data.totals.total.toFixed(2);
-                document.getElementById('cart-count').textContent = data.totals.cart_count;
-            });
-    }
-
-    // Initialize totals
-    updateTotals();
-});
-
-    </script>
 </html>

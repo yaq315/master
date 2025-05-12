@@ -105,32 +105,47 @@
                     </div>
 
                     <!-- Best Sellers Widget -->
-                    <div class="shop-widget best-seller mb-50">
-                        <h4 class="widget-title">Best Sellers</h4>
-                        <div class="widget-desc">
-                            @foreach(\App\Models\Product::inRandomOrder()->limit(3)->get() as $product)
-                            <!-- Single Best Seller Product -->
-                            <div class="single-best-seller-product d-flex align-items-center">
-                                <div class="product-thumbnail">
-                                    <a href="{{ route('shop-details', $product) }}">
-                                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
-                                    </a>
-                                </div>
-                                <div class="product-info">
-                                    <a href="{{ route('shop-details', $product) }}">{{ $product->name }}</a>
-                                    <p>${{ number_format($product->price, 2) }}</p>
-                                    <div class="ratings">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
+                  <div class="shop-widget best-seller mb-50">
+    <h4 class="widget-title">Best Sellers</h4>
+    <div class="widget-desc">
+        @php
+            $bestSellers = \App\Models\Product::whereHas('reviews')
+                ->withAvg('reviews', 'rating')
+                ->orderByDesc('reviews_avg_rating')
+                ->take(3)
+                ->get();
+        @endphp
+
+        @foreach($bestSellers as $product)
+        <div class="single-best-seller-product d-flex align-items-center">
+            <div class="product-thumbnail">
+                <a href="{{ route('shop-details', $product) }}">
+                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                </a>
+            </div>
+            <div class="product-info">
+                <a href="{{ route('shop-details', $product) }}">{{ $product->name }}</a>
+                <p>${{ number_format($product->price, 2) }}</p>
+                <div class="ratings">
+                    @php
+                        $avgRating = round($product->reviews_avg_rating);
+                        $reviewCount = $product->reviews()->count();
+                    @endphp
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if ($i <= $avgRating)
+                            <i class="fa fa-star text-warning"></i>
+                        @else
+                            <i class="fa fa-star text-secondary"></i>
+                        @endif
+                    @endfor
+                    <small>({{ $reviewCount }})</small>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+
                 </div>
             </div>
 
