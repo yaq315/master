@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('admin.create')
 
 @section('title', 'Create New User')
 
@@ -7,7 +7,8 @@
     <div class="row">
         <div class="col-12">
             <div class="card mb-4 shadow-sm">
-                <div class="card-header pb-0 bg-gradient-dark">
+                <!-- Header -->
+                <div class="card-header pb-0" style="background: linear-gradient(90deg, #4caf50, #81c784);">
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-white">Create New User</h6>
                         <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-light">
@@ -15,19 +16,22 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Body -->
                 <div class="card-body px-4 pt-4 pb-2">
                     <form action="{{ route('admin.users.store') }}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="name" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
+                                <input type="text" class="form-control" id="name" name="name" required value="{{ old('name') }}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
+                                <input type="email" class="form-control" id="email" name="email" required value="{{ old('email') }}">
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="password" class="form-label">Password</label>
@@ -38,6 +42,7 @@
                                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="role" class="form-label">User Role</label>
@@ -53,11 +58,13 @@
                                 @endif
                             </div>
                         </div>
+
                         <div class="d-flex justify-content-end mt-4">
-                            <button type="submit" class="btn btn-primary">Create User</button>
+                            <button type="submit" class="btn btn-success">Create User</button>
                         </div>
                     </form>
                 </div>
+                <!-- End card-body -->
             </div>
         </div>
     </div>

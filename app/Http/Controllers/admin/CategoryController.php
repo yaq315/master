@@ -100,6 +100,15 @@ public function update(Request $request, Category $category)
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully!');
     }
 
+    public function dashboard()
+{
+    $categories = Category::select('name', 'image', 'is_active')
+                         ->withCount('products') // إذا كنت تريد عدد المنتجات في كل فئة
+                         ->get();
+    
+    return view('admin.dashboard', compact('categories'));
+}
+
 // public function deleteImage(Category $category)
 // {
 //     if ($category->image) {

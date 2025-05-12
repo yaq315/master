@@ -53,6 +53,47 @@ class ReviewSeeder extends Seeder
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
+
+              [
+                'user_id' => 8,
+                'product_id' => 4,
+                'rating' => 5,
+                'comment' => 'Beautiful plant, adds life to my room!',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'user_id' => 9,
+                'product_id' => 5,
+                'rating' => 4,
+                'comment' => 'Easy to care for, great for indoors.',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'user_id' => 10,
+                'product_id' => 14,
+                'rating' => 5,
+                'comment' => 'Perfect outdoor plant, grew fast.',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'user_id' => 11,
+                'product_id' => 15,
+                'rating' => 4,
+                'comment' => 'Strong shovel, helped with my garden.',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'user_id' => 12,
+                'product_id' => 20,
+                'rating' => 5,
+                'comment' => 'This fertilizer really helped my soil.',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
         ];
 
         foreach ($reviews as $review) {

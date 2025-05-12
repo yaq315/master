@@ -62,8 +62,12 @@
                                     <td class="align-middle">
                                         <div class="d-flex gap-1 justify-content-end">
                                             @if(auth()->user()->isSuperAdmin())
-                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-info mb-0 px-2 py-1">
+                                            {{-- <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-info mb-0 px-2 py-1">
                                                 <i class="fas fa-pencil-alt"></i>
+                                            </a> --}}
+
+                                              <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-warning px-2 py-1">
+                                                <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="delete-form">
                                                 @csrf

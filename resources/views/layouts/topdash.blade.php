@@ -22,7 +22,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+    .rating {
+        unicode-bidi: bidi-override;
+        direction: ltr;
+        font-size: 14px;
+    }
+    .rating i {
+        display: inline-block;
+        position: relative;
+        width: 1.1em;
+    }
+</style>
     
   </head>
 

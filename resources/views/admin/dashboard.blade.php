@@ -130,167 +130,184 @@
     </div>
 </div>
 
-      <div class="col-lg-5">
-        <div class="card card-carousel overflow-hidden h-100 p-0">
-          <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
-            <div class="carousel-inner border-radius-lg h-100">
-              <div class="carousel-item h-100 active" style="background-image: url('{{asset('img/bg-img/55.avif')}}');
-    background-size: cover;">
-                <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                  <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-                    <i class="ni ni-camera-compact text-dark opacity-10"></i>
-                  </div>
-                  <h5 class="text-white mb-1">Get started with Argon</h5>
-                  <p>There’s nothing I really wanted to do in life that I wasn’t able to get good at.</p>
-                </div>
-              </div>
-              <div class="carousel-item h-100" style="background-image: url('{{asset('img/bg-img/50.jpg')}}');
-    background-size: cover;">
-                <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                  <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-                    <i class="ni ni-bulb-61 text-dark opacity-10"></i>
-                  </div>
-                  <h5 class="text-white mb-1">Faster way to create web pages</h5>
-                  <p>That’s my skill. I’m not really specifically talented at anything except for the ability to learn.</p>
-                </div>
-              </div>
-              <div class="carousel-item h-100" style="background-image: url('{{asset('img/bg-img/51.jpg')}}');
-    background-size: cover;">
-                <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                  <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-                    <i class="ni ni-trophy text-dark opacity-10"></i>
-                  </div>
-                  <h5 class="text-white mb-1">Share with us your design tips!</h5>
-                  <p>Don’t be afraid to be wrong because you can’t learn anything from a compliment.</p>
-                </div>
-              </div>
+
+
+<div class="col-lg-5">
+  <div class="card card-carousel overflow-hidden h-100 p-0">
+    <div id="leafyLandCarousel" class="carousel slide h-100" data-bs-ride="carousel">
+      <div class="carousel-inner border-radius-lg h-100">
+        
+        <!-- Slide 1 -->
+        <div class="carousel-item h-100 active" style="background-image:url('{{asset('img/bg-img/55.avif')}}'); background-size: cover;">
+          <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
+            <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
+              <i class="fas fa-seedling text-success opacity-10"></i>
             </div>
-            <button class="carousel-control-prev w-5 me-3" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next w-5 me-3" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
+            <h5 class="text-white mb-1">Plants</h5>
+            <p>Discover our collection of air-purifying  plants that add beauty to your space.</p>
+         
           </div>
         </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-item h-100" style="background-image:url('{{asset('img/bg-img/50.jpg')}}'); background-size: cover;">
+          <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
+            <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
+              <i class="fas fa-tools text-success opacity-10"></i>
+            </div>
+            <h5 class="text-white mb-1">High-Quality Gardening Tools</h5>
+            <p>Everything you need to care for your plants in one place.</p>
+           
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-item h-100" style="background-image: url('{{asset('img/bg-img/51.jpg')}}'); background-size: cover;">
+          <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
+            <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
+              <i class="fas fa-spa text-success opacity-10"></i>
+            </div>
+            <h5 class="text-white mb-1">Organic Soil & Fertilizer</h5>
+            <p>Special soil blends that provide the best environment for plant growth.</p>
+           
+          </div>
+        </div>
+
       </div>
+
+      <!-- Carousel Controls -->
+      <button class="carousel-control-prev w-5 me-3" type="button" data-bs-target="#leafyLandCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next w-5 me-3" type="button" data-bs-target="#leafyLandCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
+  </div>
+</div>
+
+
 
     
-    <div class="row mt-4">
-      <div class="col-12">
-        <div class="card mb-4">
-          <div class="card-header pb-0">
-              <div class="d-flex justify-content-between align-items-center">
-                  <h6>Recent Messages</h6>
-                  <span class="badge badge-primary">
-                      Total: {{ $contactsCount }} 
-                      (Unread: {{ $unreadContactsCount }})
-                  </span>
-              </div>
-          </div>
-          <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
-                  <table class="table align-items-center mb-0">
-                      <thead>
-                          <tr>
-                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Name</th>
-                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
-                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Subject</th>
-                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
-                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          @forelse($recentContacts as $contact)
-                          <tr class="{{ $contact->read_at ? '' : 'bg-gray-100' }}">
-                              <td class="ps-4">
-                                  <p class="text-xs font-weight-bold mb-0">{{ $contact->id }}</p>
-                              </td>
-                              <td>
-                                  <p class="text-xs font-weight-bold mb-0">{{ $contact->name }}</p>
-                              </td>
-                              <td>
-                                  <p class="text-xs font-weight-bold mb-0">{{ $contact->email }}</p>
-                              </td>
-                              <td>
-                                  <p class="text-xs font-weight-bold mb-0">{{ Str::limit($contact->subject, 30) }}</p>
-                              </td>
-                              <td class="align-middle text-center text-sm">
-                                  <span class="badge badge-sm bg-gradient-{{ $contact->read_at ? 'success' : 'warning' }}">
-                                      {{ $contact->read_at ? 'Read' : 'Unread' }}
-                                  </span>
-                              </td>
-                              <td class="align-middle text-center">
-                                  <span class="text-secondary text-xs font-weight-bold">
-                                      {{ $contact->created_at->format('Y-m-d H:i') }}
-                                  </span>
-                              </td>
-                              <td class="align-middle">
-                                  <div class="d-flex">
-                                      <a href="{{ route('admin.contacts.show', $contact->id) }}" 
-                                         class="btn btn-link text-info px-3 mb-0">
-                                          <i class="fas fa-eye me-2"></i>View
-                                      </a>
-                                      <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST">
-                                          @csrf
-                                          @method('DELETE')
-                                          <button type="submit" class="btn btn-link text-danger px-3 mb-0"
-                                                  onclick="return confirm('Are you sure?')">
-                                              <i class="fas fa-trash me-2"></i>Delete
-                                          </button>
-                                      </form>
-                                  </div>
-                              </td>
-                          </tr>
-                          @empty
-                          <tr>
-                              <td colspan="7" class="text-center py-4">
-                                  No messages found
-                              </td>
-                          </tr>
-                          @endforelse
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
-      </div>
-  </div>
-
-  <div class="row mt-4">
+<div class="row mt-4">
     <div class="col-12">
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header pb-0 bg-gradient-white">
-                <h6 class="text-dark">Latest Registered Users</h6>
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 text-dark">Recent Messages</h6>
+                <span class="badge bg-gradient-primary text-white px-3 py-2 rounded-pill">
+                    Total: {{ $contactsCount }} <small>(Unread: {{ $unreadContactsCount }})</small>
+                </span>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
-                <div class="table-responsive p-0">
+                <div class="table-responsive">
                     <table class="table align-items-center mb-0">
-                        <thead>
+                        <thead class="bg-light">
                             <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Role</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Registered At</th>
-                                <th class="text-secondary opacity-7"></th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bold">ID</th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bold ps-2">Name</th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bold">Email</th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bold">Subject</th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bold text-center">Status</th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bold text-center">Date</th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bold text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($recentContacts as $contact)
+                                <tr class="{{ $contact->read_at ? '' : 'bg-light' }} hover-effect">
+                                    <td class="ps-4">
+                                        <p class="text-sm font-weight-bold mb-0">{{ $contact->id }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-sm font-weight-bold mb-0">{{ $contact->name }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-sm mb-0">{{ $contact->email }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-sm mb-0">{{ Str::limit($contact->subject, 30) }}</p>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-{{ $contact->read_at ? 'success' : 'warning' }} text-white">
+                                            {{ $contact->read_at ? 'Read' : 'Unread' }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="text-secondary text-sm">
+                                            {{ $contact->created_at->format('Y-m-d H:i') }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a href="{{ route('admin.contacts.show', $contact->id) }}" 
+                                               class="btn btn-sm btn-outline-info">
+                                                <i class="fas fa-eye me-1"></i> View
+                                            </a>
+                                            <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST" class="delete-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn">
+                                                    <i class="fas fa-trash me-1"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center py-4 text-muted">
+                                        No messages found
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card mb-4 shadow-lg rounded-3 border-0">
+            <div class="card-header bg-white border-bottom-0 py-3 d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 text-dark">Latest Registered Users</h6>
+                <span class="badge bg-gradient-primary">
+                    Total: {{ $users->count() }}
+                </span>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+                <div class="table-responsive p-3">
+                    <table class="table align-items-center table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bold">User</th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bold ps-2">Role</th>
+                                <th class="text-center text-uppercase text-secondary text-xs font-weight-bold">Status</th>
+                                <th class="text-center text-uppercase text-secondary text-xs font-weight-bold">Registered At</th>
+                                <th class="text-center text-secondary text-xs font-weight-bold">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($users as $user)
-                            <tr>
+                            <tr class="hover-effect">
                                 <td>
-                                    <div class="d-flex px-2 py-1">
-                                        <div>
-                                            {{-- <img src="{{ asset('img/team-2.jpg') }}" class="avatar avatar-sm me-3" alt="user1"> --}}
+                                    <div class="d-flex px-2 py-1 align-items-center">
+                                        <div class="me-3">
+                                            <div class="avatar avatar-sm bg-gradient-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                                            </div>
                                         </div>
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">{{ $user->name }}</h6>
-                                            <p class="text-xs text-secondary mb-0">{{ $user->email }}</p>
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-bold text-sm">{{ $user->name }}</span>
+                                            <span class="text-xs text-muted">{{ $user->email }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -299,15 +316,15 @@
                                         {{ ucfirst($user->role) }}
                                     </span>
                                 </td>
-                                <td class="align-middle text-center text-sm">
-                                    <span class="badge badge-sm bg-gradient-success">Active</span>
+                                <td class="text-center">
+                                    <span class="badge bg-gradient-success text-white">Active</span>
                                 </td>
-                                <td class="align-middle text-center">
-                                    <span class="text-secondary text-xs font-weight-bold">{{ $user->created_at->format('M d, Y') }}</span>
+                                <td class="text-center">
+                                    <span class="text-secondary text-xs">{{ $user->created_at->format('M d, Y') }}</span>
                                 </td>
-                                <td class="align-middle">
-                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" title="Edit User">
-                                        <i class="fas fa-pencil-alt"></i>
+                                <td class="text-center">
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-secondary px-2" title="Edit User">
+                                        <i class="fas fa-edit"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -316,7 +333,7 @@
                     </table>
                 </div>
                 <div class="text-center mt-3">
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-outline-dark">
+                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-dark btn-sm">
                         View All Users <i class="fas fa-arrow-right ms-1"></i>
                     </a>
                 </div>
@@ -324,245 +341,147 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
     <div class="row mt-4">
-      <div class="col-lg-7 mb-lg-0 mb-4">
-        <div class="card ">
-          <div class="card-header pb-0 p-3">
+  <div class="col-lg-7 mb-lg-0 mb-4">
+    <div class="card shadow-sm">
+        <div class="card-header pb-0 p-3" style="background: linear-gradient(to right, #388e3c, #66bb6a);">
             <div class="d-flex justify-content-between">
-              <h6 class="mb-2">Sales by Country</h6>
+                <h6 class="text-white mb-2">Recent Reviews</h6>
             </div>
-          </div>
-          <div class="table-responsive">
-            <table class="table align-items-center ">
-              <tbody>
-                <tr>
-                  <td class="w-30">
-                    <div class="d-flex px-2 py-1 align-items-center">
-                      <div>
-                        <img src="../assets/img/icons/flags/US.png" alt="Country flag">
-                      </div>
-                      <div class="ms-4">
-                        <p class="text-xs font-weight-bold mb-0">Country:</p>
-                        <h6 class="text-sm mb-0">United States</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-center">
-                      <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                      <h6 class="text-sm mb-0">2500</h6>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-center">
-                      <p class="text-xs font-weight-bold mb-0">Value:</p>
-                      <h6 class="text-sm mb-0">$230,900</h6>
-                    </div>
-                  </td>
-                  <td class="align-middle text-sm">
-                    <div class="col text-center">
-                      <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                      <h6 class="text-sm mb-0">29.9%</h6>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="w-30">
-                    <div class="d-flex px-2 py-1 align-items-center">
-                      <div>
-                        <img src="../assets/img/icons/flags/DE.png" alt="Country flag">
-                      </div>
-                      <div class="ms-4">
-                        <p class="text-xs font-weight-bold mb-0">Country:</p>
-                        <h6 class="text-sm mb-0">Germany</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-center">
-                      <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                      <h6 class="text-sm mb-0">3.900</h6>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-center">
-                      <p class="text-xs font-weight-bold mb-0">Value:</p>
-                      <h6 class="text-sm mb-0">$440,000</h6>
-                    </div>
-                  </td>
-                  <td class="align-middle text-sm">
-                    <div class="col text-center">
-                      <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                      <h6 class="text-sm mb-0">40.22%</h6>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="w-30">
-                    <div class="d-flex px-2 py-1 align-items-center">
-                      <div>
-                        <img src="../assets/img/icons/flags/GB.png" alt="Country flag">
-                      </div>
-                      <div class="ms-4">
-                        <p class="text-xs font-weight-bold mb-0">Country:</p>
-                        <h6 class="text-sm mb-0">Great Britain</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-center">
-                      <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                      <h6 class="text-sm mb-0">1.400</h6>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-center">
-                      <p class="text-xs font-weight-bold mb-0">Value:</p>
-                      <h6 class="text-sm mb-0">$190,700</h6>
-                    </div>
-                  </td>
-                  <td class="align-middle text-sm">
-                    <div class="col text-center">
-                      <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                      <h6 class="text-sm mb-0">23.44%</h6>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="w-30">
-                    <div class="d-flex px-2 py-1 align-items-center">
-                      <div>
-                        <img src="../assets/img/icons/flags/BR.png" alt="Country flag">
-                      </div>
-                      <div class="ms-4">
-                        <p class="text-xs font-weight-bold mb-0">Country:</p>
-                        <h6 class="text-sm mb-0">Brasil</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-center">
-                      <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                      <h6 class="text-sm mb-0">562</h6>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-center">
-                      <p class="text-xs font-weight-bold mb-0">Value:</p>
-                      <h6 class="text-sm mb-0">$143,960</h6>
-                    </div>
-                  </td>
-                  <td class="align-middle text-sm">
-                    <div class="col text-center">
-                      <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                      <h6 class="text-sm mb-0">32.14%</h6>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-items-center table-striped table-bordered">
+                <thead class="text-center text-light">
+                    <tr>
+                        <th>User</th>
+                        <th>Product</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($recentReviews as $review)
+                    <tr>
+                        <td class="w-30">
+                            <div class="d-flex px-2 py-1 align-items-center">
+                                <div>
+                                    @if($review->user->profile_photo_path)
+                                        <img src="{{ asset('storage/'.$review->user->profile_photo_path) }}" 
+                                             class="avatar avatar-sm me-3" 
+                                             alt="User Avatar">
+                                    @else
+                                        <div class="avatar avatar-sm bg-gradient-dark rounded-circle me-3">
+                                            {{ substr($review->user->name, 0, 1) }}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="ms-4">
+                                    <p class="text-xs font-weight-bold mb-0">User:</p>
+                                    <h6 class="text-sm mb-0">{{ $review->user->name }}</h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <p class="text-xs font-weight-bold mb-0">Product:</p>
+                            <h6 class="text-sm mb-0">{{ $review->product->name }}</h6>
+                        </td>
+                        <td class="text-center">
+                            <p class="text-xs font-weight-bold mb-0">Rating:</p>
+                            <div class="rating">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="fas fa-star{{ $i <= $review->rating ? ' text-warning' : ' text-secondary' }}"></i>
+                                @endfor
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
             </table>
-          </div>
+        </div>
+    </div>
+</div>
+
+  <div class="col-lg-5">
+    <div class="card shadow-sm">
+        <div class="card-header pb-0 p-3" style="background: linear-gradient(to right, #388e3c, #66bb6a);">
+            <h6 class="text-white mb-0">Categories</h6>
+        </div>
+        <div class="card-body p-3">
+            <ul class="list-group">
+                @foreach($categories as $category)
+                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg shadow-sm">
+                    <div class="d-flex align-items-center">
+                        <div class="icon icon-shape icon-sm me-3  shadow text-center">
+                            @if($category->image)
+                                <img src="{{ asset('storage/' . $category->image) }}" 
+                                     alt="{{ $category->name }}"
+                                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 2px solid white;">
+                            @else
+                                <i class="ni ni-box-2 text-white opacity-10"></i>
+                            @endif
+                        </div>
+                        <div class="d-flex flex-column">
+                            <h6 class="mb-1 text-dark text-sm">{{ $category->name }}</h6>
+                            <span class="text-xs">
+                                {{ $category->products_count }} products,
+                                @if($category->is_active)
+                                    <span class="text-success">Active</span>
+                                @else
+                                    <span class="text-danger">Inactive</span>
+                                @endif
+                            </span>
+                        </div>
+                    </div>
+                    {{-- <div class="d-flex">
+                        <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto">
+                            <i class="ni ni-bold-right" aria-hidden="true"></i>
+                        </button>
+                    </div> --}}
+                </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+</div>
+
+    </div>
+  <footer class="footer pt-3">
+  <div class="container-fluid">
+    <div class="row align-items-center justify-content-between">
+      <!-- Copyright Section -->
+      <div class="col-lg-6 mb-lg-0 mb-4">
+        <div class="copyright text-center text-sm text-muted text-lg-start">
+          © <script>document.write(new Date().getFullYear())</script>,
+          made with <i class="fa fa-heart text-danger"></i> by
+          <a href="#" class="font-weight-bold text-dark" target="_blank">LeafyLand Team</a>
         </div>
       </div>
-      <div class="col-lg-5">
-        <div class="card">
-          <div class="card-header pb-0 p-3">
-            <h6 class="mb-0">Categories</h6>
-          </div>
-          <div class="card-body p-3">
-            <ul class="list-group">
-              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                <div class="d-flex align-items-center">
-                  <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                    <i class="ni ni-mobile-button text-white opacity-10"></i>
-                  </div>
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark text-sm">Devices</h6>
-                    <span class="text-xs">250 in stock, <span class="font-weight-bold">346+ sold</span></span>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                </div>
-              </li>
-              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                <div class="d-flex align-items-center">
-                  <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                    <i class="ni ni-tag text-white opacity-10"></i>
-                  </div>
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark text-sm">Tickets</h6>
-                    <span class="text-xs">123 closed, <span class="font-weight-bold">15 open</span></span>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                </div>
-              </li>
-              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                <div class="d-flex align-items-center">
-                  <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                    <i class="ni ni-box-2 text-white opacity-10"></i>
-                  </div>
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark text-sm">Error logs</h6>
-                    <span class="text-xs">1 is active, <span class="font-weight-bold">40 closed</span></span>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                </div>
-              </li>
-              <li class="list-group-item border-0 d-flex justify-content-between ps-0 border-radius-lg">
-                <div class="d-flex align-items-center">
-                  <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                    <i class="ni ni-satisfied text-white opacity-10"></i>
-                  </div>
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark text-sm">Happy users</h6>
-                    <span class="text-xs font-weight-bold">+ 430</span>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+      <!-- Footer Navigation Links -->
+      <div class="col-lg-6">
+        <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+          <li class="nav-item">
+            <a href="{{ route('home') }}" class="nav-link text-muted" target="_blank">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('about') }}" class="nav-link text-muted" target="_blank">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('shop')}}" class="nav-link text-muted" target="_blank">Shop</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('contact')}}" class="nav-link pe-0 text-muted" target="_blank">Contact</a>
+          </li>
+        </ul>
       </div>
     </div>
-    <footer class="footer pt-3">
-      <div class="container-fluid">
-        <div class="row align-items-center justify-content-lg-between">
-          <div class="col-lg-6 mb-lg-0 mb-4">
-            <div class="copyright text-center text-sm text-muted text-lg-start">
-              © <script>
-                document.write(new Date().getFullYear())
-              </script>,
-              made with <i class="fa fa-heart"></i> by
-              <a href="#" class="font-weight-bold" target="_blank">LeafyLand Team</a>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-              <li class="nav-item">
-                <a href="#" class="nav-link text-muted" target="_blank">LeafyLand</a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link text-muted" target="_blank">About Us</a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link text-muted" target="_blank">Blog</a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link pe-0 text-muted" target="_blank">License</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </footer>
+  </div>
+</footer>
+
   </div>
 
 @endsection
@@ -641,5 +560,53 @@
     </div>
   </div>
 </div>
+<style>
+    .hover-effect:hover {
+        background-color: #f4f6f9;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
+    .btn-outline-secondary {
+        color: #6c757d;
+        border-color: #6c757d;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .hover-effect:hover {
+        background-color: #f4f6f9;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-outline-info {
+        color: #17a2b8;
+        border-color: #17a2b8;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-outline-info:hover {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.75rem;
+    }
+</style>
 @endsection

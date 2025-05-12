@@ -19,48 +19,163 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- SweetAlert2 -->
+
+
 
 <!-- Font Awesome -->
 {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> --}}
   
   <!-- Custom CSS for LeafyLand -->
   <style>
-    :root {
-      --primary-color: #4CAF50;
-      --dark-color: #2E7D32;
+   :root {
+        --leafy-primary: #2E7D32;
+        --leafy-secondary: #4CAF50;
+        --leafy-light: #8BC34A;
+        --leafy-dark: #1B5E20;
     }
     
-    .bg-dark {
-      background-color: var(--dark-color) !important;
+    /* السايد بار المحسن */
+    .sidenav {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        z-index: 1038;
+        background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+        border: 1px solid rgba(0, 0, 0, 0.05);
     }
     
-    .bg-gradient-dark {
-      background-image: linear-gradient(310deg, var(--dark-color), #1e5631) !important;
+    .sidenav-header {
+        padding: 1.5rem 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
     
-    .btn-primary, .bg-gradient-primary {
-      background-image: linear-gradient(310deg, var(--primary-color), #3a8c40) !important;
-    }
-    
-    .badge.bg-primary {
-      background-color: var(--primary-color) !important;
-    }
-    
-    .sidebar .nav .nav-item .nav-link.active {
-      background-color: var(--primary-color);
-      box-shadow: 0 0 0.5rem rgba(76, 175, 80, 0.5);
+    .navbar-brand {
+        padding: 0;
     }
     
     .leafy-logo {
-      font-weight: 700;
-      color: white;
-      font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--leafy-dark);
+        font-size: 1.25rem;
+        line-height: 1.2;
     }
     
     .leafy-subtitle {
-      font-size: 0.8rem;
-      opacity: 0.8;
+        font-size: 0.75rem;
+        color: var(--leafy-secondary);
+        opacity: 0.8;
+        line-height: 1;
     }
+    
+    /* عناصر القائمة */
+    .nav-link {
+        border-radius: 0.375rem;
+        margin: 0.25rem 0.5rem;
+        padding: 0.75rem 1rem;
+        color: #495057;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+    }
+    
+    .nav-link:hover {
+        background-color: rgba(76, 175, 80, 0.1);
+        color: var(--leafy-dark);
+        transform: translateX(5px);
+    }
+    
+    .nav-link.active {
+        background: linear-gradient(310deg, var(--leafy-primary), var(--leafy-secondary));
+        color: white !important;
+        box-shadow: 0 4px 6px rgba(76, 175, 80, 0.3);
+    }
+    
+    .nav-link.active .icon {
+        background: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    .nav-link-text {
+        font-weight: 500;
+    }
+    
+    /* الأيقونات */
+    .icon {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.375rem;
+        background: rgba(76, 175, 80, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    /* القسم الفاصل */
+    .nav-item h6 {
+        letter-spacing: 0.05em;
+        font-size: 0.65rem;
+        color: var(--leafy-dark);
+        padding-top: 1rem;
+        padding-bottom: 0.5rem;
+    }
+    
+    /* شريط التمرير */
+    #sidenav-collapse-main {
+        scrollbar-width: thin;
+        scrollbar-color: var(--leafy-light) rgba(0, 0, 0, 0.05);
+    }
+    
+    #sidenav-collapse-main::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+    #sidenav-collapse-main::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+    }
+    
+    #sidenav-collapse-main::-webkit-scrollbar-thumb {
+        background-color: var(--leafy-light);
+        border-radius: 10px;
+    }
+    
+    /* تأثيرات إضافية */
+    .nav-item:last-child {
+        margin-bottom: 1rem;
+    }
+    
+    .badge-notification {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 0.6rem;
+        padding: 0.25em 0.4em;
+    }
+
+/* Pagination Hover Green */
+.pagination .page-link:hover {
+    background-color: #198754 !important; /* Bootstrap success green */
+    color: #fff !important;
+}
+
+/* Active Pagination Green */
+.pagination .page-item.active .page-link {
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    color: #fff !important;
+}
+
+/* Edit Button Yellow */
+.btn-outline-primary.edit-btn {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+
+.btn-outline-primary.edit-btn:hover {
+    background-color: #ffc107;
+    color: #fff;
+    border-color: #ffc107;
+}
+
+
   </style>
 </head>
 
@@ -68,153 +183,127 @@
   <div class="min-height-300 bg-success position-absolute w-100"></div>
   
   <!-- Sidebar -->
-  <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 d-flex flex-column" id="sidenav-main">
-    <div class="sidenav-header">
-      <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
-         aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href="https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html" target="_blank">
-        <img src="{{asset('img/core-img/favicon.ico')}}" width="50px" height="200px" class="navbar-brand-img h-100" alt="main_logo">
-        <span class="ms-1 font-weight-bold">leafyland</span>
-      </a>
+<aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4" id="sidenav-main" style="height: calc(100vh - 2rem);">
+     <div class="sidenav-header">
+        <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" 
+           aria-hidden="true" id="iconSidenav"></i>
+        <a class="navbar-brand m-0" href="{{ route('admin.dashboard') }}">
+            <img src="{{ asset('img/core-img/favicon.ico') }}" class="navbar-brand-img h-100" alt="main_logo">
+            <span class="ms-1 font-weight-bold" style="color: #2E7D32;">leafyland</span>
+        </a>
     </div>
-  
-    <hr class="horizontal dark mt-0">
-  
-    <!-- Sidebar content wrapper -->
-    <div class="flex-grow-1 overflow-hidden">
-      <div class="collapse navbar-collapse w-auto h-100" id="sidenav-collapse-main">
+
+    <hr class="horizontal dark mt-0 mb-2">
+
+    <div class="collapse navbar-collapse w-auto h-auto" id="sidenav-collapse-main" style="overflow-y: auto;">
         <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fas fa-tachometer-alt text-dark text-sm"></i>
-              </div>
-              <span class="nav-link-text ms-1">Dashboard</span>
-            </a>
-          </li>
-  
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('admin/contacts*') ? 'active' : '' }}" href="{{ route('admin.contacts.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fas fa-envelope-open-text text-dark text-sm"></i>
-              </div>
-              <span class="nav-link-text ms-1">Contact Management</span>
-            </a>
-          </li>
-  
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fas fa-users text-dark text-sm"></i>
-              </div>
-              <span class="nav-link-text ms-1">Users</span>
-            </a>
-          </li>
-  
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fas fa-users text-dark text-sm"></i>
-              </div>
-              <span class="nav-link-text ms-1">Products</span>
-            </a>
-          </li>
-
-
-          
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}" href="{{ route('admin.categories.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fas fa-users text-dark text-sm"></i>
-              </div>
-              <span class="nav-link-text ms-1">Categories</span>
-            </a>
-          </li>
-  
-          <li class="nav-item mt-3">
-            <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Settings</h6>
-          </li>
-  
-          <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('admin.profile') ? 'active' : '' }}" 
-               href="{{ route('admin.profile') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-settings-gear-65 text-dark text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">Profile Settings</span>
-            </a>
-          </li>
-  
-          @can('admin')
-          <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" 
-               href="{{ route('admin.settings.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-settings text-dark text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">System Settings</span>
-            </a>
-          </li>
-          @endcan
-  
-          <li class="nav-item">
-            <form method="POST" action="{{ route('logout') }}">
-              @csrf
-              <a class="nav-link" href="{{ route('logout') }}"
-                 onclick="event.preventDefault(); this.closest('form').submit();">
-                <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="ni ni-user-run text-dark text-sm opacity-10"></i>
-                </div>
-                <span class="nav-link-text ms-1">Logout</span>
-              </a>
-            </form>
-          </li>
-        </ul>
-      </div>
+            <!-- Dashboard -->
+                  <li class="nav-item">
+                 <a class="nav-link {{ request()->routeIs('admin.dashboard.*') ? 'active' : '' }}" 
+   href="{{ route('admin.dashboard') }}">
+    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center"
+         style="background: {{ request()->routeIs('admin.dashboard.*') ? '#2E7D32' : '#E8F5E9' }};">
+        <i class="fas fa-tachometer-alt text-{{ request()->routeIs('admin.dashboard.*') ? 'white' : 'success' }} text-sm opacity-10"></i>
     </div>
+    <span class="nav-link-text ms-1 fw-bold">Dashboard</span>
   
-    <style>
-      .sidenav {
-        overflow: hidden !important;
-        height: calc(100vh - 2rem);
-      }
-  
-      .sidenav .navbar-nav {
-        padding-bottom: 2rem;
-      }
-  
-      .nav-link {
-        transition: all 0.3s ease;
-      }
-  
-      .nav-link:hover {
-        background-color: rgba(76, 175, 80, 0.1);
-        transform: translateX(2px);
-      }
-  
-      .nav-link.active {
-        background-color: #4CAF50;
-        color: white;
-        box-shadow: 0 0 0.5rem rgba(76, 175, 80, 0.3);
-      }
-  
-      .icon i {
-        font-size: 1rem;
-      }
-    </style>
-  </aside>
+</a>
+
+            <!-- Products -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/products*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-seedling text-{{ request()->is('admin/products*') ? 'white' : 'success' }}"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Products</span>
+                </a>
+            </li>
+
+            <!-- Categories -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/categories*') ? 'active' : '' }}" href="{{ route('admin.categories.index') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-tags text-{{ request()->is('admin/categories*') ? 'white' : 'success' }}"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Categories</span>
+                </a>
+            </li>
+
+            <!-- Orders -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/orders*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-shopping-basket text-{{ request()->is('admin/orders*') ? 'white' : 'success' }}"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Orders</span>
+                </a>
+            </li>
+
+            <!-- Customers -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-users text-{{ request()->is('admin/users*') ? 'white' : 'success' }}"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">users</span>
+                </a>
+            </li>
+
+            <!-- Messages -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/contacts*') ? 'active' : '' }}" href="{{ route('admin.contacts.index') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-envelope text-{{ request()->is('admin/contacts*') ? 'white' : 'success' }}"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Messages</span>
+                    @if($unreadCount = \App\Models\Contact::whereNull('read_at')->count())
+                        <span class="badge bg-danger badge-sm ms-auto">{{ $unreadCount }}</span>
+                    @endif
+                </a>
+            </li>
+
+            <!-- Divider -->
+         
+
+            <!-- Profile -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.profile') ? 'active' : '' }}" 
+                   href="{{ route('admin.profile') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-user text-{{ request()->routeIs('admin.profile') ? 'white' : 'success' }}"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">My Profile</span>
+                </a>
+            </li>
+
+            <!-- Logout -->
+            <li class="nav-item">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a class="nav-link" href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); this.closest('form').submit();">
+                        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="fas fa-sign-out-alt text-success"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Logout</span>
+                    </a>
+                </form>
+            </li>
+        </ul>
+    </div>
+</aside>
   
 
   <main class="main-content position-relative border-radius-lg">
     <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
+    {{-- <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
-          {{-- <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Admin</a></li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page">@yield('title')</li>
           </ol>
-          <h6 class="font-weight-bolder text-white mb-0">@yield('title')</h6> --}}
+          <h6 class="font-weight-bolder text-white mb-0">@yield('title')</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
         
@@ -270,43 +359,43 @@
           </ul>
         </div>
       </div>
-    </nav>
+    </nav> --}}
     <!-- End Navbar -->
     
     <div class="container-fluid py-4">
       @yield('content')
       
-      <footer class="footer pt-3">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                made with <i class="fa fa-heart"></i> by
-                <a href="#" class="font-weight-bold" target="_blank">LeafyLand Team</a>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                <li class="nav-item">
-                  <a href="#" class="nav-link text-muted" target="_blank">LeafyLand</a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link text-muted" target="_blank">About Us</a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link text-muted" target="_blank">Blog</a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link pe-0 text-muted" target="_blank">License</a>
-                </li>
-              </ul>
-            </div>
-          </div>
+       <footer class="footer pt-3">
+  <div class="container-fluid">
+    <div class="row align-items-center justify-content-between">
+      <!-- Copyright Section -->
+      <div class="col-lg-6 mb-lg-0 mb-4">
+        <div class="copyright text-center text-sm text-muted text-lg-start">
+          © <script>document.write(new Date().getFullYear())</script>,
+          made with <i class="fa fa-heart text-danger"></i> by
+          <a href="#" class="font-weight-bold text-dark" target="_blank">LeafyLand Team</a>
         </div>
-      </footer>
+      </div>
+      <!-- Footer Navigation Links -->
+      <div class="col-lg-6">
+        <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+          <li class="nav-item">
+            <a href="{{ route('home') }}" class="nav-link text-muted" target="_blank">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('about') }}" class="nav-link text-muted" target="_blank">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('shop')}}" class="nav-link text-muted" target="_blank">Shop</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('contact')}}" class="nav-link pe-0 text-muted" target="_blank">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
     </div>
   </main>
 
@@ -355,6 +444,92 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/argon-dashboard.min.js?v=2.0.4"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const form = btn.closest('form');
+                const itemName = form.getAttribute('data-name');
+
+                Swal.fire({
+                    title: `Are you sure?`,
+                    text: `You are about to delete "${itemName}"`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Done!',
+                text: '{{ session("success") }}',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        @endif
+    });
+</script>
+<script>
+    // تفعيل السايد بار
+    document.addEventListener('DOMContentLoaded', function() {
+        // توسيع/طي السايد بار
+        const iconSidenav = document.getElementById('iconSidenav');
+        const sidenav = document.getElementById('sidenav-main');
+        
+        if (iconSidenav && sidenav) {
+            iconSidenav.addEventListener('click', function() {
+                sidenav.classList.toggle('sidenav-toggled');
+            });
+        }
+        
+        // تفعيل التلميحات
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl, {
+                trigger: 'hover'
+            });
+        });
+        
+        // تفعيل القوائم المنسدلة
+        const dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+        dropdownElementList.map(function (dropdownToggleEl) {
+            return new bootstrap.Dropdown(dropdownToggleEl);
+        });
+        
+        // إغلاق التنبيهات تلقائياً
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                new bootstrap.Alert(alert).close();
+            });
+        }, 5000);
+    });
+    
+    // تغيير لون الأيقونة عند التمرير
+    window.addEventListener('scroll', function() {
+        const sidenav = document.getElementById('sidenav-main');
+        if (window.scrollY > 50) {
+            sidenav.style.boxShadow = '0 0.5rem 1rem rgba(0, 0, 0, 0.1)';
+        } else {
+            sidenav.style.boxShadow = 'none';
+        }
+    });
+</script>
+
+
 </body>
 
 </html>

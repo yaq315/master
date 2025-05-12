@@ -39,7 +39,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'yaqoot',
-            'email' => 'yagoutgharaibeh@gmail.com',
+            'email' => 'yaqoot@gmail.com',
             'password' => Hash::make('123456789'),
             'role' => 'user',
             'profile_photo_path' => null
@@ -67,6 +67,49 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'raneem',
             'email' => 'raneem@gmail.com',
+            'password' => Hash::make('123456789'),
+            'role' => 'user',
+            'profile_photo_path' => null
+        ]);
+
+
+           User::create([
+            'name' => 'leen',
+            'email' => 'leen@gmail.com',
+            'password' => Hash::make('123456789'),
+            'role' => 'user',
+            'profile_photo_path' => null
+        ]);
+
+
+           User::create([
+            'name' => 'lama',
+            'email' => 'lama@gmail.com',
+            'password' => Hash::make('123456789'),
+            'role' => 'user',
+            'profile_photo_path' => null
+        ]);
+
+           User::create([
+            'name' => 'yasmeen',
+            'email' => 'yasmeen@gmail.com',
+            'password' => Hash::make('123456789'),
+            'role' => 'user',
+            'profile_photo_path' => null
+        ]);
+
+
+           User::create([
+            'name' => 'saba',
+            'email' => 'saba@gmail.com',
+            'password' => Hash::make('123456789'),
+            'role' => 'user',
+            'profile_photo_path' => null
+        ]);
+
+           User::create([
+            'name' => 'ahmed',
+            'email' => 'ahmed@gmail.com',
             'password' => Hash::make('123456789'),
             'role' => 'user',
             'profile_photo_path' => null

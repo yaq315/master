@@ -1,16 +1,13 @@
-@extends('admin.layout')
-
-@section('title', 'Message Details')
-
+@extends('admin.create')
 @section('content')
-<div class="container-fluid py-4 ">
+<div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
             <div class="card mb-4 shadow-sm">
-                <div class="card-header pb-0 bg-gradient-dark">
+                <div class="card-header pb-0" style="background: linear-gradient(to right, #388e3c, #66bb6a);">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="text-white">Message Details</h6>
-                        <a href="{{ route('admin.contacts.index') }}" class="btn btn-sm btn-light">
+                        <h6 class="text-white m-0">Message Details</h6>
+                        <a href="{{ route('admin.contacts.index') }}" class="btn btn-sm btn-light text-success border-success">
                             <i class="fas fa-arrow-left me-2"></i> Back to Messages
                         </a>
                     </div>
@@ -26,41 +23,41 @@
 
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <div class="info-item mb-3">
-                                <span class="info-label"><i class="fas fa-user me-2 text-dark"></i><strong>Name:</strong></span>
-                                <span class="info-value">{{ $contact->name }}</span>
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-user me-2"></i><strong>Name:</strong></label>
+                                <p>{{ $contact->name }}</p>
                             </div>
-                            <div class="info-item mb-3">
-                                <span class="info-label"><i class="fas fa-envelope me-2 text-dark"></i><strong>Email:</strong></span>
-                                <a href="mailto:{{ $contact->email }}" class="info-value text-dark">{{ $contact->email }}</a>
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-envelope me-2"></i><strong>Email:</strong></label>
+                                <a href="mailto:{{ $contact->email }}" class="form-text text-dark">{{ $contact->email }}</a>
                             </div>
                             @if($contact->phone)
-                            <div class="info-item mb-3">
-                                <span class="info-label"><i class="fas fa-phone me-2 text-dark"></i><strong>Phone:</strong></span>
-                                <a href="tel:{{ $contact->phone }}" class="info-value text-dark">{{ $contact->phone }}</a>
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-phone me-2"></i><strong>Phone:</strong></label>
+                                <a href="tel:{{ $contact->phone }}" class="form-text text-dark">{{ $contact->phone }}</a>
                             </div>
                             @endif
                         </div>
                         <div class="col-md-6">
-                            <div class="info-item mb-3">
-                                <span class="info-label"><i class="fas fa-calendar-alt me-2 text-dark"></i><strong>Date:</strong></span>
-                                <span class="info-value">{{ $contact->created_at->format('M d, Y H:i') }}</span>
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-calendar-alt me-2"></i><strong>Date:</strong></label>
+                                <p>{{ $contact->created_at->format('M d, Y H:i') }}</p>
                             </div>
-                            <div class="info-item mb-3">
-                                <span class="info-label"><i class="fas fa-circle me-2 text-dark"></i><strong>Status:</strong></span>
-                                <span class="badge bg-gradient-{{ $contact->read_at ? 'success' : 'warning' }} rounded-pill text-dark">
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-circle me-2"></i><strong>Status:</strong></label>
+                                <span class="badge bg-{{ $contact->read_at ? 'success' : 'warning' }}">
                                     {{ $contact->read_at ? 'Read' : 'Unread' }}
                                 </span>
                             </div>
                         </div>
                     </div>
                     
-                    <hr class="my-4 bg-gray-300">
-                    
+                    <hr class="my-4">
+
                     <div class="row">
                         <div class="col-12">
-                            <h5 class="mb-3"><i class="fas fa-paperclip me-2 text-dark"></i>Subject: {{ $contact->subject }}</h5>
-                            <div class="card bg-gray-100 border-0 p-4 mt-2 rounded-lg">
+                            <h5 class="mb-3"><i class="fas fa-paperclip me-2"></i>Subject: {{ $contact->subject }}</h5>
+                            <div class="card bg-light p-4 mt-2 rounded">
                                 <div class="message-content" style="white-space: pre-wrap; line-height: 1.6;">
                                     {{ $contact->message }}
                                 </div>
@@ -69,7 +66,7 @@
                     </div>
                 </div>
                 
-                <div class="card-footer bg-gray-100 d-flex justify-content-between align-items-center border-0">
+                <div class="card-footer bg-light d-flex justify-content-between align-items-center border-0">
                     <div class="d-flex gap-2">
                         @if($contact->read_at)
                             <form action="{{ route('admin.contacts.markAsUnread', $contact->id) }}" method="POST">
@@ -88,11 +85,10 @@
                         @endif
                     </div>
                     
-                    <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST">
+                    <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST" class="delete-form">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" 
-                                onclick="return confirm('Are you sure you want to permanently delete this message?')">
+                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $contact->id }}">
                             <i class="fas fa-trash me-2"></i> Delete
                         </button>
                     </form>
@@ -103,49 +99,43 @@
 </div>
 @endsection
 
-@section('styles')
-<style>
-    .info-label {
-        display: inline-block;
-        width: 100px;
-        color: #495057;
-        font-weight: 500;
-    }
-    
-    .info-value {
-        color: #212529;
-    }
-    
-    .bg-gray-100 {
-        background-color: #f8f9fa;
-    }
-    
-    .bg-gray-300 {
-        background-color: #dee2e6;
-    }
-    
-    .rounded-lg {
-        border-radius: 0.5rem;
-    }
-    
-    .message-content {
-        font-size: 0.95rem;
-        line-height: 1.7;
-        color: #495057;
-    }
-    
-    .btn-sm {
-        padding: 0.35rem 0.75rem;
-        font-size: 0.875rem;
-        border-radius: 0.375rem;
-    }
-    
-    .card-header.bg-gradient-dark {
-        color: white;
-    }
-    
-    .alert {
-        border-radius: 0.5rem;
-    }
-</style>
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // SweetAlert for Delete Confirmation
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const form = this.closest('form');
+                const contactId = this.getAttribute('data-id');
+                
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#388e3c',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        // SweetAlert for Success Message
+        @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+        @endif
+    });
+</script>
 @endsection
+
