@@ -9,12 +9,12 @@
     <!-- Fonts, Icons, Bootstrap, and Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
-    <link rel="icon" href="img/core-img/favicon.ico">
+  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
-    
+     <link rel="icon" href="img/core-img/favicon.ico">
 <style>
     /* [Master Stylesheet] */
 /*

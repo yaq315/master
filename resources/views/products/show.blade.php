@@ -279,9 +279,9 @@
                                 <a href="{{ route('shop-details', $related) }}" class="text-dark text-decoration-none">{{ $related->name }}</a>
                             </h5>
                             <div class="product-price mb-2">
-                                <span class="current-price text-dark fw-bold">${{ number_format($related->price, 2) }}</span>
+                                <span class="current-price text-dark fw-bold">{{ number_format($related->price, 2) }}JD</span>
                                 @if($related->original_price)
-                                <span class="original-price text-muted text-decoration-line-through ms-1">${{ number_format($related->original_price, 2) }}</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-1">{{ number_format($related->original_price, 2) }}JD</span>
                                 @endif
                             </div>
                             <a href="{{ route('shop-details', $related) }}" class="btn btn-outline-dark w-100 py-2">
