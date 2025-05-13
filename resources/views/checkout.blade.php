@@ -112,7 +112,7 @@
                            @foreach($cartItems as $item)
                             <div class="d-flex justify-content-between mb-2">
                                 <span>{{ $item->product->name }} × {{ $item->quantity }}</span>
-                                <span>{{ number_format($item->product->price * $item->quantity, 2) }} JOD</span>
+                                <span>{{ number_format($item->product->price * $item->quantity, 2) }} JD</span>
                             </div>
                             @endforeach
                         </div>
@@ -122,26 +122,26 @@
                         <div class="order-totals">
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Subtotal</span>
-                                <span>{{ number_format($subtotal, 2) }} JOD</span>
+                                <span>{{ number_format($subtotal, 2) }} JD</span>
                             </div>
                             
                             @if($discount > 0)
                             <div class="d-flex justify-content-between mb-2 text-success">
                                 <span>Discount</span>
-                                <span>-{{ number_format($discount, 2) }} JOD</span>
+                                <span>-{{ number_format($discount, 2) }} JD</span>
                             </div>
                             @endif
                             
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Shipping</span>
-                                <span>{{ number_format($shipping, 2) }} JOD</span>
+                                <span>{{ number_format($shipping, 2) }} JD</span>
                             </div>
                             
                             <hr>
                             
                             <div class="d-flex justify-content-between font-weight-bold">
                                 <span>Total</span>
-                                <span>{{ number_format($total, 2) }} JOD</span>
+                                <span>{{ number_format($total, 2) }} JD</span>
                             </div>
                         </div>
                     </div>
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <p><strong>Governorate:</strong> ${formData.get('city')}</p>
                         <p><strong>Address:</strong> ${formData.get('address')}</p>
                         <hr>
-                        <p><strong>Total:</strong> {{ number_format($total, 2) }} JOD</p>
+                        <p><strong>Total:</strong> {{ number_format($total, 2) }} JD</p>
                     </div>
                 `,
                 icon: 'question',

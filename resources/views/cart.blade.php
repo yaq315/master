@@ -79,8 +79,8 @@
                                                    style="max-width: 80px;">
                                         </div>
                                     </td>
-                                    <td data-label="Price">${{ number_format($item->product->price, 2) }}</td>
-                                    <td data-label="Total" class="item-total">${{ number_format($item->product->price * $item->quantity, 2) }}</td>
+                                    <td data-label="Price">{{ number_format($item->product->price, 2) }}JD</td>
+                                    <td data-label="Total" class="item-total">{{ number_format($item->product->price * $item->quantity, 2) }}JD</td>
                                     <td data-label="Action">
                                         <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $item->id }}">
                                             <i class="fas fa-trash-alt"></i>
@@ -119,7 +119,7 @@
                             <!-- Subtotal -->
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Subtotal</span>
-                                <span id="subtotal">${{ number_format($subtotal, 2) }}</span>
+                                <span id="subtotal">{{ number_format($subtotal, 2) }}JD</span>
                             </div>
                             
                             <!-- Coupon Discount -->
@@ -131,7 +131,7 @@
                             <!-- Shipping -->
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Shipping</span>
-                                <span id="shipping-cost">${{ number_format($shipping, 2) }}</span>
+                                <span id="shipping-cost">{{ number_format($shipping, 2) }}JD</span>
                             </div>
                             
                             <hr>
@@ -139,7 +139,7 @@
                             <!-- Total -->
                             <div class="d-flex justify-content-between font-weight-bold">
                                 <span>Total</span>
-                                <span id="total">${{ number_format($total, 2) }}</span>
+                                <span id="total">{{ number_format($total, 2) }}JD</span>
                             </div>
                         </div>
                         

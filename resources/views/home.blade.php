@@ -367,7 +367,7 @@
                             {{ $product->name }}
                         </a>
                         <div class="product-price text-success fw-bold mb-2">
-                            ${{ number_format($product->price, 2) }}
+                            {{ number_format($product->price, 2) }}JD
                         </div>
                         <a href="{{ route('shop-details', $product->slug) }}" class="btn btn-success btn-sm">
                             View Details <i class="fa fa-arrow-right ms-2"></i>

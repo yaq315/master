@@ -58,10 +58,10 @@
                     <h1 class="product-title mb-3 fw-bold">{{ $product->name }}</h1>
                     
                     <div class="price-section mb-4">
-                        <span class="current-price fs-3 text-dark fw-bold">${{ number_format($product->price, 2) }}</span>
+                        <span class="current-price fs-3 text-dark fw-bold">{{ number_format($product->price, 2) }}JD</span>
                         {{-- <span class="product-size text-muted ms-2">Size: Medium</span> --}}
                         @if($product->original_price)
-                        <span class="original-price text-muted text-decoration-line-through ms-2">${{ number_format($product->original_price, 2) }}</span>
+                        <span class="original-price text-muted text-decoration-line-through ms-2">{{ number_format($product->original_price, 2) }}JD</span>
                         <span class="discount-badge bg-success text-white px-2 py-1 rounded ms-2 fs-6">
                             Save {{ number_format(100 - ($product->price / $product->original_price * 100), 0) }}%
                         </span>

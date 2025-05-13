@@ -183,9 +183,9 @@
                             {{ $product->category->name }}
                         </div>
                         <div class="product-price">
-                            <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                            <span class="current-price">{{ number_format($product->price, 2) }}JD</span>
                             @if($product->is_on_sale && $product->original_price)
-                            <span class="original-price">${{ number_format($product->original_price, 2) }}</span>
+                            <span class="original-price">{{ number_format($product->original_price, 2) }}JD</span>
                             @endif
                         </div>
                     </div>

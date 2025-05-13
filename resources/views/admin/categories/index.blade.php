@@ -66,10 +66,11 @@
                                             <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-sm btn-outline-warning px-2 py-1">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="delete-form">
+                                        
+                                               <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="delete-form" >
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger px-2 py-1" onclick="return confirm('Are you sure?')">
+                                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" style="font-size: 12px; padding: 0.25rem 0.5rem;">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -88,4 +89,45 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const form = btn.closest('form');
+                const itemName = form.getAttribute('data-name');
+
+                Swal.fire({
+                    title: `Are you sure?`,
+                    text: `You are about to delete "${itemName}"`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '{{ session("success") }}',
+            timer: 2000,
+            showConfirmButton: false
+        });
+        @endif
+    });
+</script>
 @endsection

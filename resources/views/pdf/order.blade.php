@@ -52,29 +52,29 @@
             <tr>
                 <td>{{ $item->product->name }}</td>
                 <td>{{ $item->quantity }}</td>
-                <td>{{ number_format($item->price, 2) }} JOD</td>
-                <td>{{ number_format($item->price * $item->quantity, 2) }} JOD</td>
+                <td>{{ number_format($item->price, 2) }} JD</td>
+                <td>{{ number_format($item->price * $item->quantity, 2) }} JD</td>
             </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="3" class="text-right">Subtotal:</td>
-                <td>{{ number_format($order->subtotal, 2) }} JOD</td>
+                <td>{{ number_format($order->subtotal, 2) }} JD</td>
             </tr>
             @if($order->discount > 0)
             <tr>
                 <td colspan="3" class="text-right">Discount:</td>
-                <td>-{{ number_format($order->discount, 2) }} JOD</td>
+                <td>-{{ number_format($order->discount, 2) }} JD</td>
             </tr>
             @endif
             <tr>
                 <td colspan="3" class="text-right">Shipping:</td>
-                <td>{{ number_format($order->shipping, 2) }} JOD</td>
+                <td>{{ number_format($order->shipping, 2) }} JD</td>
             </tr>
             <tr>
                 <td colspan="3" class="text-right">Total:</td>
-                <td><strong>{{ number_format($order->total, 2) }} JOD</strong></td>
+                <td><strong>{{ number_format($order->total, 2) }} JD</strong></td>
             </tr>
         </tfoot>
     </table>
