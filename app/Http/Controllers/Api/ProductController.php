@@ -44,22 +44,36 @@ class ProductController extends Controller
         }
 
         // Apply filters (from the model)
-        $filters = $request->only(['category', 'price_min', 'price_max', 'tags', 'name', 'is_featured', 'is_hot', 'is_on_sale']);
-        $products = Product::filter($filters)->paginate($request->per_page ?? 9);
+        $filters = $request->only(['category','category_id', 'price_min', 'price_max', 'tags', 'name', 'is_featured', 'is_hot', 'is_on_sale']);
+        $products = Product::filter($filters)->paginate($request->per_page ?? 63);
 
         return ProductResource::collection($products);
     }
 
-    public function show($id)
-    {
-        $product = Product::findOrFail($id);
-        return response()->json([
+ public function show($id)
+{
+    $product = Product::findOrFail($id);
+
+    return response()->json([
+        'data' => [
             'id' => $product->id,
             'name' => $product->name,
-            'image' => asset('storage/'.$product->image), // سيولد http://127.0.0.1:8000/storage/products/montasera.jpeg
-            // ... باقي الحقول
-        ]);
-    }
+            'slug' => $product->slug,
+            'description' => $product->description,
+            'care_instructions' => $product->care_instructions,
+            'usage' => $product->usage,
+            'price' => $product->price,
+            'original_price' => $product->original_price,
+            'image' => asset('storage/' . $product->image),
+            'is_featured' => $product->is_featured,
+            'is_hot' => $product->is_hot,
+            'is_on_sale' => $product->is_on_sale,
+            'stock' => $product->stock,
+            
+        ]
+    ]);
+}
+
 
     public function getProducts()
 {

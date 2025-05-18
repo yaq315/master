@@ -43,47 +43,43 @@ class Product extends Model
      * @param array $filters
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFilter(Builder $query, array $filters): Builder
-    {
-        // Filter by category
-        if (!empty($filters['category'])) {
-            $query->where('category_id', $filters['category']);
+   public function scopeFilter($query, $filters)
+{
+    if (isset($filters['category'])) {
+        $category = Category::where('slug', $filters['category'])->first();
+        if ($category) {
+            $query->where('category_id', $category->id);
         }
-
-        // Filter by price range
-        if (!empty($filters['price_min']) && !empty($filters['price_max'])) {
-            $query->whereBetween('price', [$filters['price_min'], $filters['price_max']]);
-        }
-
-        // Filter by tags (assuming a many-to-many relationship)
-        if (!empty($filters['tags'])) {
-            $query->whereHas('tags', function ($q) use ($filters) {
-                $q->whereIn('id', $filters['tags']);
-            });
-        }
-
-        // Filter by name (example)
-        if (!empty($filters['name'])) {
-            $query->where('name', 'like', '%' . $filters['name'] . '%');
-        }
-
-        // Filter by featured products (if applicable)
-        if (isset($filters['is_featured'])) {
-            $query->where('is_featured', $filters['is_featured']);
-        }
-
-        // Filter by hot products (if applicable)
-        if (isset($filters['is_hot'])) {
-            $query->where('is_hot', $filters['is_hot']);
-        }
-
-        // Filter by on sale products (if applicable)
-        if (isset($filters['is_on_sale'])) {
-            $query->where('is_on_sale', $filters['is_on_sale']);
-        }
-
-        return $query;
     }
+
+    if (isset($filters['category_id'])) {
+        $query->where('category_id', $filters['category_id']);
+    }
+
+    if (isset($filters['price_min'])) {
+        $query->where('price', '>=', $filters['price_min']);
+    }
+
+    if (isset($filters['price_max'])) {
+        $query->where('price', '<=', $filters['price_max']);
+    }
+
+    if (isset($filters['name'])) {
+        $query->where('name', 'like', '%' . $filters['name'] . '%');
+    }
+
+    if (isset($filters['is_featured'])) {
+        $query->where('is_featured', $filters['is_featured']);
+    }
+
+    if (isset($filters['is_hot'])) {
+        $query->where('is_hot', $filters['is_hot']);
+    }
+
+    if (isset($filters['is_on_sale'])) {
+        $query->where('is_on_sale', $filters['is_on_sale']);
+    }
+}
 
     public function reviews()
 {
