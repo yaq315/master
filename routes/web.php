@@ -111,7 +111,7 @@ Route::post('/products/{product_id}/reviews', [ProductReviewController::class, '
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items');
 Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
-Route::post('/cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
+// Route::post('/cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
 Route::delete('/cart/delete/{id}', [CartController::class, 'deleteItem'])->name('cart.delete');
 Route::post('/cart/update', [CartController::class, 'updateQuantity'])->name('cart.update');
 Route::post('/cart/update-totals', [CartController::class, 'updateTotals'])->name('cart.updateTotals');

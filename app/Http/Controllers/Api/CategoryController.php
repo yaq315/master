@@ -13,6 +13,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::where('is_active', true)->get();
+        
         return CategoryResource::collection($categories);
     }
 

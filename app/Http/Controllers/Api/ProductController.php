@@ -4,14 +4,25 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductResource;
 use App\Http\Requests\SearchProductsRequest;
 use App\Http\Controllers\Controller;
 
 
+
 class ProductController extends Controller
 {
+
+    
+    public function getImages()
+    {
+        $images = Storage::files('storage/app/public/categories'); // Get list of images in the 'public/images' directory
+        $imageUrls = array_map(fn($image) => Storage::url($image), $images);  // Generate full URLs
+        return response()->json(['images' => $imageUrls]);
+    }
+
+    
     public function index(SearchProductsRequest $request)
     {
         $query = Product::query()->with('category');
@@ -64,7 +75,7 @@ class ProductController extends Controller
             'usage' => $product->usage,
             'price' => $product->price,
             'original_price' => $product->original_price,
-            'image' => asset('storage/' . $product->image),
+            'image' => url(asset('storage/' . $product->image)),
             'is_featured' => $product->is_featured,
             'is_hot' => $product->is_hot,
             'is_on_sale' => $product->is_on_sale,
@@ -82,10 +93,12 @@ class ProductController extends Controller
             'id' => $product->id,
             'name' => $product->name,
             'price' => $product->price,
-            'image' => asset('storage/' . $product->image), // إرجاع رابط كامل
+            'image' => url(asset('storage/products/' . $product->image)), // إرجاع رابط كامل
         ];
     });
 
     return response()->json(['products' => $products]);
 }
+
+
 }
