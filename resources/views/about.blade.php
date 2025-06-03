@@ -65,7 +65,7 @@
                 <div class="col-12 col-lg-5">
                     <!-- Section Heading -->
                     <div class="section-heading">
-                        <h2>ABOUT US</h2>
+                        <h2>ABOUT</h2>
                         <p>We are passionate about plants and gardening.</p>
                     </div>
                     <p>At LeafyLand, we believe that everyone deserves a green space to relax and enjoy. Our mission is to provide high-quality plants and tools to help you create your dream garden.</p>
